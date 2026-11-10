@@ -1,0 +1,11 @@
+# Configurações locais do Claude
+.claude/
+
+# Python
+__pycache__/
+*.pyc
+
+# Sistema
+Thumbs.db
+desktop.ini
+.DS_Store
