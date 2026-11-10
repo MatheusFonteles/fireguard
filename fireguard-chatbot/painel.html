@@ -1,0 +1,991 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FireGuard · Painel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script>try{document.documentElement.dataset.theme=localStorage.getItem('fg_tema')||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark')}catch(e){}</script>
+<style>
+:root{--bg:#0a0a0c;--bg2:#111114;--bg3:#18181c;--bg4:#202026;--line:rgba(255,255,255,.07);--line2:rgba(255,255,255,.13);
+--txt:#f4f2ee;--muted:#9a9aa3;--fire:#ff5a1f;--fire2:#ffa52b;--wa:#25d366;--grad:linear-gradient(120deg,#ff5a1f,#ffa52b);
+--accent-txt:#ffa52b;--sumbg:#1c120d;--overlay:rgba(0,0,0,.6);
+--wa-bg:#0b141a;--wa-head:#202c33;--wa-in:#202c33;--wa-out:#005c4b;--wa-bot:#1d3a4a;--wa-txt:#e9edef;--wa-sub:#8696a0;--wa-input:#2a3942;--wa-chip:#2a3942;--wa-who:#53bdeb;--wa-who2:#7ee2b8;
+color-scheme:dark}
+:root[data-theme="light"]{--bg:#f6f4f0;--bg2:#ffffff;--bg3:#f3f0eb;--bg4:#e8e4dd;--line:rgba(20,15,10,.08);--line2:rgba(20,15,10,.15);
+--txt:#17130f;--muted:#615c55;--accent-txt:#d9480f;--sumbg:#fff1e8;--overlay:rgba(20,15,10,.35);
+--wa-bg:#efeae2;--wa-head:#f0f2f5;--wa-in:#ffffff;--wa-out:#d9fdd3;--wa-bot:#dbeefc;--wa-txt:#111b21;--wa-sub:#667781;--wa-input:#ffffff;--wa-chip:#ffffff;--wa-who:#027eb5;--wa-who2:#008069;
+color-scheme:light}
+.theme-btn{width:36px;height:36px;border-radius:10px;border:1px solid var(--line2);background:var(--bg3);color:var(--txt);cursor:pointer;display:grid;place-items:center}
+.theme-btn:hover{border-color:var(--accent-txt)}
+:root[data-theme="light"] .i-sun,:root:not([data-theme="light"]) .i-moon{display:none}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--txt);font-family:Inter,system-ui,sans-serif;font-size:14px;height:100vh;overflow:hidden}
+h1,h2,h3,h4{font-family:Sora,sans-serif;letter-spacing:-.01em}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:inherit;text-decoration:none}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:10px;border:1px solid var(--line2);background:var(--bg3);cursor:pointer;font-weight:500;font-size:.85rem;transition:.2s;white-space:nowrap}
+.btn:hover{border-color:var(--accent-txt)}
+.btn-fire{background:var(--grad);color:#170a04;border:0;font-weight:600}
+.btn-wa{background:var(--wa);color:#04210f;border:0;font-weight:600}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:.72rem;font-weight:600;white-space:nowrap}
+.badge::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+
+/* LOGIN */
+#login{position:fixed;inset:0;z-index:200;display:grid;place-items:center;background:radial-gradient(50% 50% at 50% 30%,rgba(255,90,31,.15),transparent),var(--bg)}
+#login form{width:min(380px,92vw);background:var(--bg2);border:1px solid var(--line2);border-radius:22px;padding:38px;text-align:center}
+#login img{width:84px;height:84px;border-radius:50%;margin:0 auto 18px}
+#login input{width:100%;margin-top:12px;padding:13px 14px;border-radius:12px;background:var(--bg3);border:1px solid var(--line2);outline:none}
+#login input:focus{border-color:var(--fire)}
+#login .btn{width:100%;justify-content:center;margin-top:20px;padding:13px}
+#login small{display:block;color:var(--muted);margin-top:14px}
+
+/* LAYOUT */
+.app{display:grid;grid-template-columns:240px 1fr;height:100vh}
+aside.side{background:var(--bg2);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:20px 14px}
+.brand{display:flex;gap:10px;align-items:center;padding:4px 8px 24px}
+.brand img{width:40px;height:40px;border-radius:50%}
+.brand b{font-family:Sora;font-size:1.05rem}.brand b span{color:var(--fire)}
+.brand small{display:block;color:var(--muted);font-size:.7rem;font-family:Inter}
+.side nav{display:grid;gap:4px}
+.side nav button{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;border:0;background:none;cursor:pointer;color:var(--muted);text-align:left;font-weight:500}
+.side nav button svg{width:18px;height:18px}
+.side nav button:hover{background:var(--bg3);color:var(--txt)}
+.side nav button.on{background:rgba(255,90,31,.1);color:var(--txt);box-shadow:inset 3px 0 0 var(--fire)}
+.side nav .cnt{margin-left:auto;background:var(--fire);color:#170a04;font-size:.7rem;font-weight:700;border-radius:999px;padding:1px 7px}
+.side .foot{margin-top:auto;padding:14px;border:1px solid var(--line);border-radius:14px;font-size:.78rem;color:var(--muted)}
+.side .foot b{color:var(--txt);display:block;margin-bottom:4px}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--wa);margin-right:6px;box-shadow:0 0 0 3px rgba(37,211,102,.2)}
+
+main{display:flex;flex-direction:column;overflow:hidden}
+.top{height:68px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:16px;padding:0 28px;flex-shrink:0}
+.top h2{font-size:1.15rem}
+.top .search{margin-left:auto;display:flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--line);border-radius:10px;padding:8px 12px;width:280px}
+.top .search input{background:none;border:0;outline:none;width:100%}
+.avatar{width:36px;height:36px;border-radius:50%;background:var(--grad);display:grid;place-items:center;color:#170a04;font-weight:700}
+.view{flex:1;overflow:auto;padding:26px 28px;display:none}
+.view.on{display:block}
+
+/* DASHBOARD */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}
+.kpi{background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:20px}
+.kpi small{color:var(--muted)}
+.kpi b{display:block;font-family:Sora;font-size:1.7rem;margin:8px 0 4px}
+.kpi em{font-style:normal;font-size:.78rem;color:#34d399}
+.grid2{display:grid;grid-template-columns:1.6fr 1fr;gap:16px}
+.box{background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:22px}
+.box h3{font-size:.95rem;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center}
+.funnel{display:grid;gap:12px}
+.funnel div{display:grid;grid-template-columns:130px 1fr 110px;gap:12px;align-items:center;font-size:.83rem}
+.funnel .bar{height:10px;border-radius:6px;background:var(--bg4);overflow:hidden}
+.funnel .bar i{display:block;height:100%;border-radius:6px;transition:width 1s}
+.funnel span:last-child{text-align:right;color:var(--muted)}
+.list{display:grid}
+.list .row{display:grid;grid-template-columns:1fr auto;gap:10px;padding:12px 0;border-bottom:1px solid var(--line);cursor:pointer}
+.list .row:last-child{border:0}
+.list .row:hover b{color:var(--accent-txt)}
+.list small{color:var(--muted);display:block;font-size:.76rem}
+.chart{display:flex;align-items:flex-end;gap:10px;height:150px;padding-top:10px}
+.chart div{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end}
+.chart i{width:100%;border-radius:6px 6px 0 0;background:linear-gradient(180deg,var(--fire2),var(--fire));opacity:.85;min-height:4px}
+.chart span{font-size:.7rem;color:var(--muted)}
+
+/* KANBAN */
+.toolbar{display:flex;gap:10px;align-items:center;margin-bottom:18px;flex-wrap:wrap}
+.toolbar select{background:var(--bg3);border:1px solid var(--line2);border-radius:10px;padding:8px 12px}
+.kanban{display:grid;grid-auto-flow:column;grid-auto-columns:270px;gap:14px;overflow-x:auto;padding-bottom:10px;min-height:calc(100vh - 200px)}
+.col{background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.col.drag{border-color:var(--fire);background:rgba(255,90,31,.05)}
+.col header{display:flex;justify-content:space-between;align-items:center;padding:4px 6px 8px;font-weight:600;font-size:.85rem}
+.col header span{color:var(--muted);font-size:.75rem;font-weight:500}
+.kc{background:var(--bg3);border:1px solid var(--line);border-radius:12px;padding:14px;cursor:grab;transition:.2s}
+.kc:hover{border-color:var(--line2);transform:translateY(-2px)}
+.kc .p{font-size:.72rem;color:var(--accent-txt);font-weight:600}
+.kc b{display:block;margin:4px 0 2px}
+.kc small{color:var(--muted);font-size:.76rem;display:block}
+.kc .ft{display:flex;justify-content:space-between;align-items:center;margin-top:12px;font-size:.78rem}
+.kc .ft b{margin:0;font-family:Sora}
+.tag{font-size:.68rem;padding:2px 8px;border-radius:6px;background:var(--bg4);color:var(--muted)}
+.new-dot{width:8px;height:8px;border-radius:50%;background:var(--fire);display:inline-block;margin-left:6px;animation:blink 1.4s infinite}
+@keyframes blink{50%{opacity:.2}}
+
+/* DRAWER */
+.drawer-bg{position:fixed;inset:0;background:var(--overlay);z-index:100;opacity:0;pointer-events:none;transition:.3s}
+.drawer-bg.on{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(920px,100vw);background:var(--bg);border-left:1px solid var(--line2);z-index:101;transform:translateX(100%);transition:.35s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column}
+.drawer.on{transform:none}
+.dh{padding:22px 28px;border-bottom:1px solid var(--line);display:flex;align-items:flex-start;gap:16px}
+.dh h3{font-size:1.3rem}
+.dh small{color:var(--muted)}
+.dh .x{margin-left:auto;background:none;border:0;font-size:1.6rem;cursor:pointer;color:var(--muted)}
+.tabs{display:flex;gap:4px;padding:0 28px;border-bottom:1px solid var(--line)}
+.tabs button{background:none;border:0;padding:14px 14px;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;font-weight:500}
+.tabs button.on{color:var(--txt);border-color:var(--fire)}
+.db{flex:1;overflow:auto;padding:24px 28px}
+.tp{display:none}.tp.on{display:block}
+.calc{display:grid;grid-template-columns:1.2fr 1fr;gap:20px}
+.fs{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.f label{display:block;font-size:.75rem;color:var(--muted);margin-bottom:5px}
+.f input,.f select,.f textarea{width:100%;background:var(--bg3);border:1px solid var(--line2);border-radius:10px;padding:10px 12px;outline:none}
+.f input:focus,.f select:focus{border-color:var(--fire)}
+.f.full{grid-column:1/-1}
+.ex{display:flex;flex-wrap:wrap;gap:8px}
+.f .ex label{margin:0;color:var(--txt)}
+.ex label{display:flex;gap:6px;align-items:center;padding:7px 10px;border:1px solid var(--line2);border-radius:8px;font-size:.8rem;cursor:pointer}
+.ex input{accent-color:var(--fire)}
+.sum{background:linear-gradient(170deg,var(--sumbg),var(--bg2) 55%);border:1px solid rgba(255,90,31,.3);border-radius:16px;padding:22px;align-self:start;position:sticky;top:0}
+.sum .ln{display:flex;justify-content:space-between;padding:7px 0;color:var(--muted);font-size:.85rem;gap:10px}
+.sum .ln b{color:var(--txt);font-weight:500}
+.sum .tot{border-top:1px dashed var(--line2);margin-top:10px;padding-top:14px;display:flex;justify-content:space-between;align-items:baseline}
+.sum .tot b{font-family:Sora;font-size:1.7rem}
+.sum .btns{display:grid;gap:8px;margin-top:18px}
+.sum .btns .btn{justify-content:center}
+/* alertas / atendimento humano */
+.alertas{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px;margin-bottom:16px}
+.alerta{border-radius:14px;padding:14px 16px;border:1px solid;display:flex;gap:12px;align-items:flex-start}
+.alerta.hum{border-color:rgba(248,113,113,.45);background:rgba(248,113,113,.08)}
+.alerta.ag{border-color:rgba(52,211,153,.4);background:rgba(52,211,153,.07)}
+.alerta.vis{border-color:rgba(167,139,250,.4);background:rgba(167,139,250,.07)}
+.alerta .ico{font-size:1.4rem;line-height:1}
+.alerta b{display:block;margin-bottom:4px}
+.alerta ul{list-style:none;display:grid;gap:4px;font-size:.82rem}
+.alerta li{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.alerta li a{color:var(--accent-txt);font-weight:600;cursor:pointer;white-space:nowrap}
+.alerta small{color:var(--muted)}
+.side nav .cnt.red{background:#ef4444;color:#fff}
+.side nav .cnt:empty,.side nav .cnt[data-z="1"]{display:none}
+.htag{font-size:.66rem;padding:2px 7px;border-radius:6px;background:rgba(239,68,68,.15);color:#f87171;font-weight:600;white-space:nowrap}
+.gtag{font-size:.66rem;padding:2px 7px;border-radius:6px;background:rgba(167,139,250,.15);color:#a78bfa;font-weight:600;white-space:nowrap}
+.kc .tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+.banner{display:flex;gap:12px;align-items:center;padding:12px 28px;font-size:.85rem;border-bottom:1px solid var(--line)}
+.banner.hum{background:rgba(239,68,68,.1)}
+.banner.ate{background:rgba(52,211,153,.1)}
+.banner .btn{margin-left:auto}
+.banner small{color:var(--muted);display:block}
+.cv.hum{box-shadow:inset 3px 0 0 #ef4444}
+.cv.urg{box-shadow:inset 4px 0 0 #ef4444;background:rgba(239,68,68,.08)}
+.utag{font-size:.66rem;padding:2px 8px;border-radius:6px;background:#ef4444;color:#fff;font-weight:700;letter-spacing:.04em;white-space:nowrap;animation:blink 1.6s infinite}
+.kc.urg{border-color:#ef4444;box-shadow:0 0 0 1px #ef4444,0 8px 24px -10px rgba(239,68,68,.7)}
+.alerta.urg{border-color:#ef4444;background:rgba(239,68,68,.15)}
+.alerta.urg b{color:#f87171}
+.banner.urg{background:rgba(239,68,68,.16);box-shadow:inset 4px 0 0 #ef4444}
+.banner .btn+.btn{margin-left:8px}
+.fb{margin-top:10px;padding:10px 12px;border-radius:10px;background:var(--bg3);font-size:.84rem}
+.fb small{display:block;color:var(--muted);font-size:.72rem}
+/* agenda */
+.ag-grid{display:grid;grid-template-columns:1fr 1.6fr 280px;gap:16px;align-items:start}
+.pend{background:var(--bg3);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px;font-size:.82rem}
+.pend b{display:block;font-size:.88rem}
+.pend .chips{display:flex;flex-wrap:wrap;gap:4px;margin:8px 0}
+.chip{font-size:.72rem;padding:3px 9px;border-radius:999px;background:rgba(52,211,153,.14);color:#34d399;font-weight:600}
+.pend .btn{width:100%;justify-content:center;margin-top:4px}
+.day{margin-bottom:14px}
+.day h4{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
+.day h4.hoje{color:var(--accent-txt)}
+.ev{display:grid;grid-template-columns:56px 1fr auto;gap:12px;align-items:center;padding:10px 12px;border-radius:12px;background:var(--bg3);border:1px solid var(--line);margin-bottom:6px;cursor:pointer;border-left:3px solid var(--c)}
+.ev:hover{border-color:var(--line2)}
+.ev .h{font-family:Sora;font-weight:600}
+.ev small{display:block;color:var(--muted);font-size:.75rem}
+.eq{display:flex;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);font-size:.82rem}
+.eq .av{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:700;color:#170a04;flex-shrink:0}
+.eq small{display:block;color:var(--muted);font-size:.72rem}
+.eq span.n{margin-left:auto;color:var(--muted);font-size:.75rem;white-space:nowrap}
+.agf{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:16px}
+.agf h4{margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.agf>p{color:var(--muted);font-size:.8rem;margin-bottom:12px}
+.agf .row3{display:grid;grid-template-columns:1fr 1fr 1.3fr;gap:10px;margin:12px 0}
+.agf .ok{padding:12px 14px;border-radius:10px;background:var(--bg3);font-size:.85rem;display:grid;gap:3px}
+.agf .ok small{color:var(--muted)}
+.agf.off{opacity:.5;pointer-events:none}
+.stars{color:#fbbf24;letter-spacing:2px}
+.inf{background:var(--bg2);border:1px solid rgba(255,90,31,.35);border-radius:14px;padding:16px 18px;margin-bottom:6px}
+.inf-h{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+.inf-h small{display:block;color:var(--muted);font-size:.74rem}
+.inf-g{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px;font-size:.84rem}
+.inf-g small{display:block;color:var(--muted);font-size:.7rem}
+.inf-obs{margin:12px 0 8px;padding:10px 12px;border-left:3px solid var(--fire);background:var(--bg3);border-radius:8px;font-size:.84rem}
+.inf-obs small{display:block;color:var(--muted);font-size:.7rem}
+.flash{animation:flash 1.2s}
+@keyframes flash{0%,40%{border-color:var(--fire);box-shadow:0 0 0 3px rgba(255,90,31,.25)}}
+.info{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:22px}
+.info div{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.info small{color:var(--muted);font-size:.72rem;display:block}
+.sec-t{font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:22px 0 12px}
+
+/* CHAT (WhatsApp-like) */
+.wa-chat{display:flex;flex-direction:column;height:100%;background:var(--wa-bg);color:var(--wa-txt);border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+.wa-chat .hd{background:var(--wa-head);padding:12px 16px;display:flex;gap:12px;align-items:center}
+.wa-chat .hd .av{width:38px;height:38px;border-radius:50%;background:#6b7c85;display:grid;place-items:center;font-weight:700}
+.wa-chat .hd small{color:var(--wa-sub);display:block;font-size:.74rem}
+.wa-msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:6px;min-height:300px}
+.m{max-width:75%;padding:7px 11px 5px;border-radius:9px;font-size:.86rem;line-height:1.45;white-space:pre-line;box-shadow:0 1px .5px rgba(0,0,0,.13)}
+.m time{display:block;text-align:right;font-size:.64rem;color:var(--wa-sub)}
+.m.cliente{background:var(--wa-in);align-self:flex-start;border-top-left-radius:2px}
+.m.atendente{background:var(--wa-out);align-self:flex-end;border-top-right-radius:2px}
+.m.bot{background:var(--wa-bot);align-self:flex-end;border-top-right-radius:2px}
+.m .who{font-size:.68rem;font-weight:600;color:var(--wa-who);display:block}
+.m.atendente .who{color:var(--wa-who2)}
+.m .fg-md{display:block;width:260px;max-width:100%;border-radius:8px;margin:4px 0;cursor:zoom-in}
+.m audio.fg-md{height:40px;cursor:auto}
+.m .ai{font-size:.72rem;color:var(--wa-sub);margin-top:2px}
+.wa-chat .qr{display:flex;gap:6px;padding:8px 12px 0;flex-wrap:wrap;background:var(--wa-head)}
+.wa-chat .qr button{background:var(--wa-chip);border:0;border-radius:14px;padding:5px 10px;font-size:.74rem;color:var(--wa-txt);cursor:pointer}
+.wa-chat form{display:flex;gap:8px;padding:10px;background:var(--wa-head)}
+.wa-chat form input{flex:1;background:var(--wa-input);border:0;border-radius:20px;padding:10px 16px;outline:none;color:var(--wa-txt)}
+.wa-chat form button{width:40px;height:40px;border-radius:50%;border:0;background:#00a884;color:#fff;cursor:pointer}
+/* MÍDIAS */
+.mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+.mcard{background:var(--bg2);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.mcard .pv{aspect-ratio:4/3;background:var(--bg4);display:grid;place-items:center;overflow:hidden}
+.mcard .pv img,.mcard .pv video{width:100%;height:100%;object-fit:cover;cursor:zoom-in}
+.mcard .pv audio{width:90%}
+.mcard .bd{padding:12px 14px;font-size:.8rem;display:grid;gap:4px}
+.mcard .bd b{font-size:.85rem;word-break:break-all}
+.mcard .ln{display:flex;justify-content:space-between;gap:8px;color:var(--muted)}
+.mcard .ln span:last-child{color:var(--txt);text-align:right}
+.mtags{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.mtags span{font-size:.68rem;padding:2px 8px;border-radius:6px;background:rgba(255,90,31,.12);color:var(--accent-txt)}
+.ai-badge{display:inline-flex;gap:6px;align-items:center;font-size:.7rem;font-weight:600;color:#34d399;margin-top:6px}
+.mcard .ft{display:flex;gap:6px;padding:0 14px 12px}
+.mcard .ft a,.mcard .ft button{flex:1;justify-content:center;padding:7px 8px;font-size:.75rem}
+.mstrip{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
+.mstrip img,.mstrip video{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;cursor:zoom-in}
+.mstrip .au{grid-column:1/-1}
+.mstrip audio{width:100%;height:34px}
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:400;display:none;place-items:center;padding:30px;cursor:zoom-out}
+.lightbox.on{display:grid}
+.lightbox img{max-width:100%;max-height:100%;border-radius:10px}
+.empty{color:var(--muted);text-align:center;padding:50px 20px;border:1.5px dashed var(--line2);border-radius:14px}
+.hist{list-style:none}
+.hist li{padding:0 0 18px 26px;position:relative;font-size:.86rem}
+.hist li::before{content:"";position:absolute;left:4px;top:5px;width:10px;height:10px;border-radius:50%;background:var(--c,var(--fire))}
+.hist li::after{content:"";position:absolute;left:8px;top:18px;bottom:0;width:2px;background:var(--line2)}
+.hist li:last-child::after{display:none}
+.hist small{display:block;color:var(--muted)}
+
+/* CONVERSAS */
+.inbox{display:grid;grid-template-columns:320px 1fr 260px;gap:14px;height:calc(100vh - 120px)}
+.convs{background:var(--bg2);border:1px solid var(--line);border-radius:14px;overflow-y:auto}
+.cv{display:flex;gap:12px;padding:14px;border-bottom:1px solid var(--line);cursor:pointer}
+.cv:hover,.cv.on{background:var(--bg3)}
+.cv .av{width:42px;height:42px;border-radius:50%;flex-shrink:0;display:grid;place-items:center;font-weight:700;color:#170a04}
+.cv .t{flex:1;min-width:0}
+.cv .t b{display:flex;justify-content:space-between;font-size:.88rem}
+.cv .t b time{font-weight:400;color:var(--muted);font-size:.72rem}
+.cv .t p{color:var(--muted);font-size:.8rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ctx{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:18px;overflow-y:auto}
+.ctx h4{margin-bottom:4px}
+.ctx .ln{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line);font-size:.82rem;color:var(--muted);gap:8px}
+.ctx .ln b{color:var(--txt);font-weight:500;text-align:right}
+.bot-card{margin-top:16px;padding:14px;border-radius:12px;background:rgba(37,211,102,.06);border:1px solid rgba(37,211,102,.25);font-size:.8rem;color:var(--muted)}
+.bot-card b{color:var(--txt);display:block;margin-bottom:4px}
+
+/* PREÇOS */
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-weight:500;color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;padding:10px 12px;border-bottom:1px solid var(--line)}
+td{padding:10px 12px;border-bottom:1px solid var(--line)}
+td input{background:var(--bg3);border:1px solid var(--line2);border-radius:8px;padding:7px 10px;width:130px;outline:none}
+td input:focus{border-color:var(--fire)}
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,40px);background:var(--bg4);border:1px solid var(--line2);padding:12px 20px;border-radius:12px;opacity:0;transition:.3s;z-index:300;box-shadow:0 20px 40px -10px #000}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+@media(max-width:1100px){.ag-grid{grid-template-columns:1fr}.agf .row3{grid-template-columns:1fr}.kpis{grid-template-columns:1fr 1fr}.grid2,.calc,.pgrid{grid-template-columns:1fr}.inbox{grid-template-columns:260px 1fr}.ctx{display:none}}
+@media(max-width:760px){
+  body{overflow:auto;height:auto}.app{grid-template-columns:1fr;height:auto}
+  aside.side{position:sticky;top:0;z-index:20;flex-direction:row;align-items:center;padding:10px;overflow-x:auto}
+  .brand{padding:0 10px 0 0}.brand div{display:none}
+  .side nav{display:flex}.side nav button span:not(.cnt){display:none}.side .foot{display:none}
+  .top{padding:0 16px}.top .search{display:none}
+  .view{padding:16px}.kpis{grid-template-columns:1fr}.inbox{grid-template-columns:1fr;height:auto}.convs{max-height:240px}
+  .info,.fs{grid-template-columns:1fr}.funnel div{grid-template-columns:100px 1fr 80px}
+}
+</style>
+</head>
+<body>
+
+<div id="login">
+  <form id="loginForm">
+    <img src="assets/logo.jpg" alt="FireGuard">
+    <h2 style="font-size:1.3rem">Painel FireGuard</h2>
+    <p style="color:var(--muted);margin-top:6px">Gestão de orçamentos e atendimento</p>
+    <input placeholder="E-mail" value="comercial@fireguard.com.br" aria-label="E-mail">
+    <input type="password" placeholder="Senha" value="demonstracao" aria-label="Senha">
+    <button class="btn btn-fire">Entrar no painel</button>
+    <small>Ambiente de demonstração — qualquer senha funciona.</small>
+  </form>
+</div>
+
+<div class="app">
+  <aside class="side">
+    <div class="brand"><img src="assets/logo.jpg" alt=""><div><b><span>FIRE</span>GUARD</b><small>Painel comercial</small></div></div>
+    <nav id="nav">
+      <button data-v="dash" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg><span>Visão geral</span></button>
+      <button data-v="orc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg><span>Orçamentos</span><span class="cnt" id="cNovo">0</span></button>
+      <button data-v="chat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg><span>Conversas</span><span class="cnt red" id="cHum"></span></button>
+      <button data-v="agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg><span>Agenda</span><span class="cnt" id="cAg"></span></button>
+      <button data-v="precos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h4"/></svg><span>Tabela de preços</span></button>
+    </nav>
+    <div class="foot"><b><span class="dot"></span>WhatsApp conectado</b>Chatbot ativo · respondendo 24h<br><a href="index.html" id="linkFront" style="color:var(--accent-txt)">← Ver site</a> · <a href="#" id="reset" style="color:var(--muted)">Resetar demo</a></div>
+  </aside>
+
+  <main>
+    <div class="top">
+      <h2 id="vt">Visão geral</h2>
+      <label class="search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><input id="q" placeholder="Buscar cliente ou protocolo"></label>
+      <button class="btn btn-fire" id="btnNovo">+ Novo orçamento</button>
+      <button class="theme-btn" id="themeBtn" aria-label="Alternar modo claro/escuro" title="Modo claro/escuro">
+        <svg class="i-sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg class="i-moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+      <div class="avatar" title="Camila · Comercial">C</div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <section class="view on" id="v-dash">
+      <div class="alertas" id="alertas"></div>
+      <div class="kpis" id="kpis"></div>
+      <div class="grid2">
+        <div class="box"><h3>Funil de orçamentos</h3><div class="funnel" id="funnel"></div></div>
+        <div class="box"><h3>Últimas solicitações <a href="#" data-go="orc" style="color:var(--accent-txt);font-size:.8rem;font-family:Inter">ver todas</a></h3><div class="list" id="recent"></div></div>
+      </div>
+      <div class="grid2" style="margin-top:16px">
+        <div class="box"><h3>Valor em propostas por semana</h3><div class="chart" id="chart"></div></div>
+        <div class="box"><h3>Mix de produtos</h3><div class="funnel" id="mix"></div></div>
+      </div>
+    </section>
+
+    <!-- ORÇAMENTOS -->
+    <section class="view" id="v-orc">
+      <div class="toolbar">
+        <select id="fProd"><option value="">Todos os produtos</option></select>
+        <span style="color:var(--muted);font-size:.8rem">Arraste os cards entre colunas para mudar o status · clique para abrir</span>
+      </div>
+      <div class="kanban" id="kanban"></div>
+    </section>
+
+    <!-- CONVERSAS -->
+    <section class="view" id="v-chat">
+      <div class="inbox">
+        <div class="convs" id="convs"></div>
+        <div id="convMain"></div>
+        <div class="ctx" id="convCtx"></div>
+      </div>
+    </section>
+
+    <!-- AGENDA -->
+    <section class="view" id="v-agenda">
+      <div class="ag-grid">
+        <div class="box"><h3>Aguardando agendamento</h3><div id="agPend"></div></div>
+        <div class="box"><h3>Próximos 14 dias <small style="color:var(--muted);font-family:Inter;font-weight:400">visitas técnicas e instalações</small></h3><div id="agDias"></div></div>
+        <div class="box"><h3>Equipe de campo</h3><div id="agEq"></div></div>
+      </div>
+    </section>
+
+    <!-- PREÇOS -->
+    <section class="view" id="v-precos">
+      <p style="color:var(--muted);margin-bottom:18px">Os valores abaixo alimentam a calculadora de cotação do painel. O cliente nunca vê esta tabela: ele só recebe o valor final que você enviar.</p>
+      <div class="pgrid" id="precosBox"></div>
+      <div style="margin-top:18px;display:flex;gap:10px"><button class="btn btn-fire" id="savePrecos">Salvar tabela</button><button class="btn" id="restorePrecos">Restaurar padrão</button></div>
+    </section>
+  </main>
+</div>
+
+<!-- DRAWER -->
+<div class="drawer-bg" id="dbg"></div>
+<div class="drawer" id="drawer">
+  <div class="dh">
+    <div><small id="dProto"></small><h3 id="dNome"></h3><small id="dSub"></small></div>
+    <select id="dStatus" class="btn" style="margin-left:auto"></select>
+    <button class="x" id="dClose" aria-label="Fechar">×</button>
+  </div>
+  <div id="dBanner"></div>
+  <div class="tabs" id="dTabs">
+    <button data-t="calc" class="on">Calculadora & proposta</button>
+    <button data-t="agenda" id="tabAgenda">Visita & instalação</button>
+    <button data-t="conv">Conversa WhatsApp</button>
+    <button data-t="midias" id="tabMidias">Fotos, vídeos e áudios</button>
+    <button data-t="hist">Histórico</button>
+  </div>
+  <div class="db">
+    <div class="tp on" id="t-calc"></div>
+    <div class="tp" id="t-agenda"></div>
+    <div class="tp" id="t-conv" style="height:100%"></div>
+    <div class="tp" id="t-midias"></div>
+    <div class="tp" id="t-hist"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="lightbox" id="lb" onclick="this.classList.remove('on')"><img alt=""></div>
+
+<script src="assets/config.js?v=10"></script>
+<script src="assets/data.js?v=10"></script>
+<script>
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const brl = FG.brl;
+const fmtD = d => new Date(d).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' });
+const fmtH = d => new Date(d).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+const cores = ['#ff8a3c', '#60a5fa', '#a78bfa', '#34d399', '#fbbf24', '#f472b6', '#22d3ee'];
+const corDe = s => cores[[...s].reduce((a, c) => a + c.charCodeAt(0), 0) % cores.length];
+const ini = n => n.split(' ').filter(Boolean).slice(0, 2).map(x => x[0]).join('').toUpperCase();
+let atual = null, convSel = null, termo = '';
+const ATENDENTE = FG.EQUIPE.atendentes[0];
+const agoraISO = () => new Date().toISOString();
+const hojeISO = FG.iso(new Date());
+const precisaAtendente = x => x.humano?.status === 'aguardando';
+const ehUrgente = x => !!x.urgente && x.urgente.status !== 'resolvido';
+const prioridade = x => (ehUrgente(x) ? 2 : precisaAtendente(x) ? 1 : 0);
+const precisaAgenda = x => x.status === 'aprovado' && !x.visita;
+const desde = d => { const m = Math.round((Date.now() - new Date(d)) / 60000); return m < 60 ? `há ${Math.max(1, m)} min` : m < 1440 ? `há ${Math.round(m / 60)} h` : `há ${Math.round(m / 1440)} d`; };
+function avisarCliente(it, txt, acao, de = 'bot') { it.mensagens.push({ de, txt, acao, em: agoraISO(), ...(de === 'atendente' ? { autor: ATENDENTE } : {}) }); }
+
+function toast(t) { const el = $('#toast'); el.textContent = t; el.classList.add('on'); clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove('on'), 2600); }
+function valor(it) { return it.proposta ?? 0; }
+const valorTxt = it => it.proposta != null ? brl(it.proposta) : '<span style="color:var(--muted);font-weight:500;font-family:Inter;font-size:.75rem">A cotar</span>';
+if (FG.MODO === 'chatbot') { const lf = document.getElementById('linkFront'); lf.textContent = '← Simulador WhatsApp'; }
+function lista() {
+  let l = FG.todos();
+  if (termo) l = l.filter(x => (x.cliente + x.protocolo + x.cidade).toLowerCase().includes(termo));
+  return l;
+}
+
+/* login */
+try { if (sessionStorage.getItem('fg_auth')) $('#login').remove(); } catch {}
+$('#loginForm')?.addEventListener('submit', e => { e.preventDefault(); try { sessionStorage.setItem('fg_auth', 1); } catch {} $('#login').remove(); });
+
+/* navegação */
+const titulos = { dash: 'Visão geral', orc: 'Orçamentos', chat: 'Conversas', agenda: 'Agenda', precos: 'Tabela de preços' };
+function ir(v) {
+  $$('#nav button').forEach(b => b.classList.toggle('on', b.dataset.v === v));
+  $$('.view').forEach(s => s.classList.toggle('on', s.id === 'v-' + v));
+  $('#vt').textContent = titulos[v];
+  render();
+}
+$$('#nav button').forEach(b => b.onclick = () => ir(b.dataset.v));
+$$('[data-go]').forEach(a => a.onclick = e => { e.preventDefault(); ir(a.dataset.go); });
+$('#q').oninput = e => { termo = e.target.value.toLowerCase(); render(); };
+
+/* DASHBOARD */
+function renderDash() {
+  const l = FG.todos();
+  const urg = l.filter(ehUrgente), hum = l.filter(x => precisaAtendente(x) && !ehUrgente(x)), ag = l.filter(precisaAgenda);
+  const prox = eventos(l).filter(e => e.data <= FG.diaMais(2));
+  $('#alertas').innerHTML = [
+    urg.length ? `<div class="alerta urg"><span class="ico">🚨</span><div style="flex:1"><b>${urg.length} atendimento(s) URGENTE(S) · avaliação baixa</b><ul>${urg.map(x => `<li><span>${x.cliente} <small>· nota ${x.urgente.nota}/5${x.urgente.categoria ? ' · ' + x.urgente.categoria : ''}${x.urgente.relato ? ' · “' + x.urgente.relato + '”' : ''} · ${desde(x.urgente.em)}</small></span><a data-hum="${x.id}">Atender agora →</a></li>`).join('')}</ul></div></div>` : '',
+    hum.length ? `<div class="alerta hum"><span class="ico">🙋</span><div style="flex:1"><b>${hum.length} cliente(s) pediram atendente</b><ul>${hum.map(x => `<li><span>${x.cliente} <small>· ${x.humano.motivo} · ${desde(x.humano.solicitadoEm)}</small></span><a data-hum="${x.id}">Atender →</a></li>`).join('')}</ul></div></div>` : '',
+    ag.length ? `<div class="alerta ag"><span class="ico">📅</span><div style="flex:1"><b>${ag.length} aprovado(s) aguardando visita técnica</b><ul>${ag.map(x => `<li><span>${x.cliente} <small>· ${x.visitaPref ? 'preferência: ' + prefTxt(x.visitaPref) : 'aguardando o cliente escolher datas'}</small></span><a data-ag="${x.id}">Agendar →</a></li>`).join('')}</ul></div></div>` : '',
+    prox.length ? `<div class="alerta vis"><span class="ico">🚐</span><div style="flex:1"><b>Próximos 2 dias em campo</b><ul>${prox.slice(0, 4).map(e => `<li><span>${e.tipo === 'visita' ? '📐' : '🛠️'} ${FG.fmtDia(e.data)} ${e.hora} · ${e.it.cliente} <small>· ${e.resp}</small></span><a data-ag="${e.it.id}">Ver →</a></li>`).join('')}</ul></div></div>` : '',
+  ].join('');
+  $$('[data-hum]').forEach(a => a.onclick = () => { abrir(a.dataset.hum); aba('conv'); });
+  $$('#alertas [data-ag]').forEach(a => a.onclick = () => { abrir(a.dataset.ag); aba('agenda'); });
+  const abertos = l.filter(x => ['novo', 'analise', 'enviado'].includes(x.status));
+  const ganhos = l.filter(x => ['aprovado', 'medicao', 'instalacao', 'concluido'].includes(x.status));
+  const fechados = ganhos.length + l.filter(x => x.status === 'perdido').length;
+  const pipeline = l.filter(x => x.status === 'enviado').reduce((a, x) => a + valor(x), 0);
+  const fat = ganhos.reduce((a, x) => a + valor(x), 0);
+  $('#kpis').innerHTML = [
+    ['Solicitações no mês', l.length, '+18% vs. mês anterior'],
+    ['Em aberto', abertos.length, `${l.filter(x => x.status === 'novo').length} novos · ${hum.length} pediram atendente`],
+    ['Propostas enviadas', brl(pipeline), 'aguardando aprovação'],
+    ['Vendido', brl(fat), `conversão de ${fechados ? Math.round(ganhos.length / fechados * 100) : 0}%`],
+  ].map(([a, b, c]) => `<div class="kpi"><small>${a}</small><b>${b}</b><em>${c}</em></div>`).join('');
+  const max = Math.max(...FG.STATUS.map(s => l.filter(x => x.status === s.id).length), 1);
+  $('#funnel').innerHTML = FG.STATUS.map(s => {
+    const it = l.filter(x => x.status === s.id), n = it.length;
+    return `<div><span>${s.nome}</span><span class="bar"><i style="width:${n / max * 100}%;background:${s.cor}"></i></span><span>${n}${it.some(x => x.proposta != null) ? ' · ' + brl(it.reduce((a, x) => a + valor(x), 0)) : ''}</span></div>`;
+  }).join('');
+  $('#recent').innerHTML = l.slice(0, 6).map(x => { const s = FG.statusInfo(x.status);
+    return `<div class="row" data-id="${x.id}"><div><b>${x.cliente}</b><small>${x.protocolo} · ${FG.calcular(x).produto} · ${fmtD(x.criadoEm)}${(x.midias || []).length ? ' · 📎 ' + x.midias.length : ''}</small></div><span class="badge" style="color:${s.cor};background:${s.cor}1f">${s.nome}</span></div>`; }).join('');
+  $$('#recent .row').forEach(r => r.onclick = () => abrir(r.dataset.id));
+  const sem = [38, 52, 41, 66, 58, 74, 61, 89];
+  const mx = Math.max(...sem);
+  $('#chart').innerHTML = sem.map((v, i) => `<div><span>${v}k</span><i style="height:${v / mx * 100}%"></i><span>S${i + 38}</span></div>`).join('');
+  const P = FG.precos();
+  const mix = Object.entries(P.produtos).map(([k, v]) => [v.nome, l.filter(x => x.produto === k).length]);
+  const mm = Math.max(...mix.map(x => x[1]), 1);
+  $('#mix').innerHTML = mix.map(([n, c], i) => `<div><span>${n}</span><span class="bar"><i style="width:${c / mm * 100}%;background:${cores[i]}"></i></span><span>${c}</span></div>`).join('');
+}
+
+/* KANBAN */
+const P0 = FG.precos();
+$('#fProd').innerHTML += Object.entries(P0.produtos).map(([k, v]) => `<option value="${k}">${v.nome}</option>`).join('');
+$('#fProd').onchange = render;
+function tagsCard(x) {
+  const t = [];
+  if (ehUrgente(x)) t.push(`<span class="utag">🚨 URGENTE · ${x.urgente.nota}/5</span>`);
+  else if (x.feedback && x.avaliacao <= 3) t.push('<span class="htag">⚠️ Avaliação baixa</span>');
+  if (precisaAtendente(x) && !ehUrgente(x)) t.push('<span class="htag">🙋 Pediu atendente</span>');
+  if (x.humano?.status === 'atendendo') t.push(`<span class="gtag">👤 ${FG.primeiro(x.humano.por)} atendendo</span>`);
+  if (precisaAgenda(x)) t.push(`<span class="gtag" style="color:#34d399;background:rgba(52,211,153,.14)">📅 ${x.visitaPref ? 'Datas recebidas' : 'Aguardando datas'}</span>`);
+  if (x.status === 'medicao' && x.visita) t.push(`<span class="gtag">📐 ${FG.fmtDia(x.visita.data)} ${x.visita.hora}${x.visita.confirmada ? ' ✓' : ''}</span>`);
+  if (x.status === 'instalacao' && x.instalacao) t.push(`<span class="gtag" style="color:#22d3ee;background:rgba(34,211,238,.14)">🛠️ ${FG.fmtDia(x.instalacao.data)}${x.instalacao.remarcar ? ' ⚠️' : x.instalacao.confirmada ? ' ✓' : ''}</span>`);
+  if (x.avaliacao) t.push(`<span class="gtag" style="color:#fbbf24;background:rgba(251,191,36,.14)">${'★'.repeat(x.avaliacao)}</span>`);
+  if (x.status === 'perdido' && x.motivoPerda) t.push(`<span class="gtag" style="color:#f87171;background:rgba(248,113,113,.12)">${x.motivoPerda}</span>`);
+  return t.length ? `<div class="tags">${t.join('')}</div>` : '';
+}
+function renderKanban() {
+  const fp = $('#fProd').value;
+  const l = lista().filter(x => !fp || x.produto === fp);
+  $('#kanban').innerHTML = FG.STATUS.map(s => {
+    const it = l.filter(x => x.status === s.id).sort((a, b) => prioridade(b) - prioridade(a));
+    return `<div class="col" data-s="${s.id}"><header><span style="color:${s.cor};font-size:.85rem;font-weight:600">● ${s.nome}</span><span>${it.length}${it.some(x => x.proposta != null) ? ' · ' + brl(it.reduce((a, x) => a + valor(x), 0)).replace(',00', '') : ''}</span></header>
+      ${it.map(x => `<div class="kc ${ehUrgente(x) ? 'urg' : ''}" draggable="true" data-id="${x.id}"><span class="p">${x.protocolo}${x.status === 'novo' ? '<i class="new-dot"></i>' : ''}</span><b>${x.cliente}</b><small>${FG.calcular(x).produto}</small><small>${x.cidade || '—'}</small>${tagsCard(x)}
+      <div class="ft"><span class="tag">${x.origem || 'WhatsApp'}${(x.midias || []).length ? ` · 📎 ${x.midias.length}` : ''}</span><b>${valorTxt(x)}</b></div></div>`).join('')}</div>`;
+  }).join('');
+  $$('.kc').forEach(c => {
+    c.onclick = () => abrir(c.dataset.id);
+    c.ondragstart = e => e.dataTransfer.setData('id', c.dataset.id);
+  });
+  $$('.col').forEach(col => {
+    col.ondragover = e => { e.preventDefault(); col.classList.add('drag'); };
+    col.ondragleave = () => col.classList.remove('drag');
+    col.ondrop = e => { e.preventDefault(); col.classList.remove('drag'); mudarStatus(e.dataTransfer.getData('id'), col.dataset.s); };
+  });
+}
+
+function mudarStatus(id, st) {
+  const it = FG.todos().find(x => x.id === id); if (!it || it.status === st) return;
+  // etapas com agenda pedem data e responsável antes de avisar o cliente
+  // concluir por qualquer caminho (seletor, arrastar ou botão) envia a mensagem final e o pedido de avaliação
+  if (st === 'concluido') {
+    FG.mudarStatus(it, 'concluido', false); avisarCliente(it, FG.MSG.concluido(it), 'concluido');
+    FG.atualizar(it); toast('Serviço concluído · cliente convidado a avaliar');
+    render(); if (atual === id) abrir(id, true);
+    return;
+  }
+  // "Orçamento enviado" pelo card/seletor NUNCA dispara envio: o envio é exclusivo do botão da calculadora
+  if (st === 'enviado') {
+    if (it.proposta == null) { abrir(id); aba('calc'); $('#dStatus').value = it.status; return toast('Para enviar o valor, use o botão "Enviar orçamento ao cliente"'); }
+    FG.mudarStatus(it, 'enviado', false); FG.atualizar(it);
+    toast(`${it.protocolo} → Orçamento enviado · nada foi reenviado ao cliente`);
+    render(); if (atual === id) abrir(id, true); return;
+  }
+  if ((st === 'medicao' && !it.visita) || (st === 'instalacao' && !it.instalacao)) {
+    abrir(id); aba('agenda');
+    $('#dStatus').value = it.status;
+    return toast('Defina data e responsável para avisar o cliente');
+  }
+  FG.mudarStatus(it, st, true);
+  FG.atualizar(it); toast(`${it.protocolo} → ${FG.statusInfo(st).nome} · cliente avisado no WhatsApp`);
+  render(); if (atual === id) abrir(id, true);
+}
+
+/* DRAWER */
+$('#dStatus').innerHTML = FG.STATUS.map(s => `<option value="${s.id}">${s.nome}</option>`).join('');
+$('#dStatus').onchange = e => mudarStatus(atual, e.target.value);
+$('#dClose').onclick = $('#dbg').onclick = fechar;
+addEventListener('keydown', e => { if (e.key === 'Escape') fechar(); });
+function fechar() { $('#drawer').classList.remove('on'); $('#dbg').classList.remove('on'); atual = null; }
+$$('#dTabs button').forEach(b => b.onclick = () => aba(b.dataset.t));
+function aba(t) { $$('#dTabs button').forEach(x => x.classList.toggle('on', x.dataset.t === t)); $$('.tp').forEach(x => x.classList.toggle('on', x.id === 't-' + t)); }
+
+/* MÍDIAS */
+const rot = { imagem: '📷 Foto', video: '🎥 Vídeo', audio: '🎤 Áudio' };
+function zoom(root) {
+  root.querySelectorAll('img.fg-md').forEach(im => im.onclick = () => { $('#lb img').src = im.src; $('#lb').classList.add('on'); });
+}
+function midiasHTML(it) {
+  const ms = it.midias || [];
+  if (!ms.length) return `<div class="empty"><div style="font-size:2rem">📭</div>O cliente ainda não enviou fotos, vídeos ou áudios.<br><small>Eles chegam aqui automaticamente pelo site ou pelo chatbot do WhatsApp.</small></div>`;
+  const cont = t => ms.filter(m => m.tipo === t).length;
+  return `<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;font-size:.82rem;color:var(--muted)">
+      <span class="tag">📷 ${cont('imagem')} fotos</span><span class="tag">🎥 ${cont('video')} vídeos</span><span class="tag">🎤 ${cont('audio')} áudios</span>
+      <span style="margin-left:auto">Pré-análise automática gerada na chegada de cada arquivo</span></div>
+    <div class="mgrid">${ms.map((m, i) => { const a = m.analise || {};
+      return `<div class="mcard"><div class="pv">${FG.midiaHTML(m)}</div><div class="bd">
+        <b>${rot[m.tipo]} · ${m.nome || ''}</b>
+        <div class="ln"><span>Recebido</span><span>${fmtH(m.em)} · ${m.origem}</span></div>
+        <div class="ln"><span>Tamanho</span><span>${FG.fmtTam(m.tamanho || 0)}${a.duracao ? ' · ' + a.duracao : ''}</span></div>
+        ${m.tipo !== 'audio' ? `
+        <span class="ai-badge">✨ Pré-análise automática</span>
+        ${a.ambiente ? `<div class="ln"><span>Ambiente</span><span>${a.ambiente}</span></div>` : ''}
+        ${a.luz ? `<div class="ln"><span>Iluminação</span><span>${a.luz}</span></div>` : ''}
+        ${a.resolucao ? `<div class="ln"><span>Resolução</span><span>${a.resolucao} · ${a.orientacao}</span></div>` : ''}
+        ${a.qualidade ? `<div class="ln"><span>Para orçamento</span><span style="color:${a.qualidade === 'Adequada' ? '#34d399' : '#fbbf24'}">${a.qualidade}</span></div>` : ''}
+        ${(a.tags || []).length ? `<div class="mtags">${a.tags.map(t => `<span>${t}</span>`).join('')}</div>` : ''}` : `
+        <span class="ai-badge">🎧 Áudio do cliente</span>
+        <div class="ln"><span>Transcrição</span><span>disponível na integração oficial</span></div>`}
+      </div><div class="ft"><button class="btn" data-dl="${i}">⬇ Baixar</button>${m.tipo !== 'audio' ? `<button class="btn" data-pedir="${i}">Pedir nova</button>` : ''}</div></div>`; }).join('')}</div>`;
+}
+function ligarMidias(root, it) {
+  FG.hidratar(root); zoom(root);
+  root.querySelectorAll('[data-dl]').forEach(b => b.onclick = async () => {
+    const m = it.midias[+b.dataset.dl]; const a = document.createElement('a');
+    a.href = await FG.media.url(m); a.download = m.nome || 'arquivo'; a.click();
+  });
+  root.querySelectorAll('[data-pedir]').forEach(b => b.onclick = () => {
+    const x = FG.todos().find(y => y.id === it.id);
+    x.mensagens.push({ de: 'atendente', em: new Date().toISOString(), txt: 'Obrigado pelas imagens! Pode enviar mais uma foto mostrando o vão inteiro, de preferência com uma trena aberta? 📏' });
+    FG.atualizar(x); toast('Pedido de nova foto enviado ao cliente'); render(); abrir(x.id, true);
+  });
+}
+
+const prefTxt = p => (p.datas?.length ? p.datas.map(FG.fmtDia).join(', ') : p.texto || 'a combinar') + (p.periodo ? ` · ${p.periodo.split(' (')[0].toLowerCase()}` : '');
+function bannerHTML(it) {
+  if (ehUrgente(it)) {
+    const u = it.urgente, ate = it.humano?.status === 'atendendo';
+    return `<div class="banner urg"><span style="font-size:1.4rem">🚨</span><div><b style="color:#f87171">ATENDIMENTO URGENTE · avaliação ${u.nota}/5${u.categoria ? ' · ' + u.categoria : ''}</b>
+      <small>${u.relato ? '“' + u.relato + '” · ' : ''}${ate ? it.humano.por + ' está atendendo · a Lara está pausada' : 'O cliente quer falar com um atendente'} · ${desde(u.em)}</small></div>
+      ${ate ? '' : `<button class="btn btn-fire" data-assumir="${it.id}">Assumir conversa</button>`}<button class="btn" data-resolver="${it.id}">✅ Marcar como resolvido</button></div>`;
+  }
+  if (precisaAtendente(it)) return `<div class="banner hum"><span style="font-size:1.3rem">🙋</span><div><b>${FG.primeiro(it.cliente)} pediu para falar com um atendente</b><small>${it.humano.motivo} · ${desde(it.humano.solicitadoEm)}</small></div><button class="btn btn-fire" data-assumir="${it.id}">Assumir conversa</button></div>`;
+  if (it.humano?.status === 'atendendo') return `<div class="banner ate"><span style="font-size:1.3rem">👤</span><div><b>${it.humano.por} está atendendo</b><small>A Lara está pausada nesta conversa enquanto a equipe responde</small></div><button class="btn" data-devolver="${it.id}">Encerrar e devolver à Lara</button></div>`;
+  return '';
+}
+function ligarBanner(root) {
+  root.querySelectorAll('[data-assumir]').forEach(b => b.onclick = () => assumir(b.dataset.assumir));
+  root.querySelectorAll('[data-devolver]').forEach(b => b.onclick = () => devolver(b.dataset.devolver));
+  root.querySelectorAll('[data-resolver]').forEach(b => b.onclick = () => resolverUrgente(b.dataset.resolver));
+}
+function assumir(id, silencioso) {
+  const it = FG.todos().find(x => x.id === id); if (!it) return;
+  it.humano = { ...(it.humano || { motivo: 'Atendimento iniciado pela equipe', solicitadoEm: agoraISO() }), status: 'atendendo', por: ATENDENTE, assumidoEm: agoraISO() };
+  avisarCliente(it, `👋 Oi, ${FG.primeiro(it.cliente)}! Aqui é a ${FG.primeiro(ATENDENTE)}, da equipe FireGuard. Vou te atender agora. 😊`, 'humano-on', 'atendente');
+  if (it.status === 'novo') FG.mudarStatus(it, 'analise', false);
+  FG.atualizar(it); if (!silencioso) toast('Você assumiu a conversa · a Lara foi pausada');
+  render(); if (atual === id) { abrir(id, true); aba('conv'); }
+}
+function resolverUrgente(id) {
+  const it = FG.todos().find(x => x.id === id); if (!it?.urgente) return;
+  it.urgente = { ...it.urgente, status: 'resolvido', resolvidoEm: agoraISO(), resolvidoPor: ATENDENTE };
+  if (it.humano?.status === 'aguardando') it.humano = { ...it.humano, status: 'encerrado', encerradoEm: agoraISO() };
+  FG.atualizar(it); toast('Atendimento urgente marcado como resolvido'); render(); if (atual === id) abrir(id, true);
+}
+function devolver(id) {
+  const it = FG.todos().find(x => x.id === id); if (!it) return;
+  it.humano = { ...it.humano, status: 'encerrado', encerradoEm: agoraISO() };
+  avisarCliente(it, `Foi um prazer te atender, ${FG.primeiro(it.cliente)}! 💛 A Lara continua à disposição por aqui para o que precisar.`, 'humano-off', 'atendente');
+  FG.atualizar(it); toast('Conversa devolvida à Lara'); render(); if (atual === id) abrir(id, true);
+}
+
+/* AGENDA (aba do pedido) */
+const HORAS = ['08:00', '09:00', '10:00', '11:00', '13:00', '14:00', '15:00', '16:00', '17:00'];
+const optsHora = sel => HORAS.map(h => `<option ${h === sel ? 'selected' : ''}>${h}</option>`).join('');
+function agendaHTML(it) {
+  const pref = it.visitaPref, v = it.visita, ins = it.instalacao;
+  const podeVisita = ['aprovado', 'medicao', 'instalacao', 'concluido'].includes(it.status);
+  const dataSug = pref?.datas?.[0] || FG.diasUteis(1)[0];
+  const horaSug = /tarde/i.test(pref?.periodo || '') ? '14:00' : '09:00';
+  const t = v && FG.tecnico(v.tecnico), e = ins && FG.equipeInst(ins.equipe);
+  const visitaBox = v ? `<div class="ok"><b>📐 ${FG.fmtDiaLongo(v.data)}, às ${v.hora}</b><span>Técnico: ${t.nome}</span>
+      <small>${v.confirmada ? '✅ Confirmado pelo cliente no WhatsApp' : '⏳ Aguardando confirmação do cliente'}</small></div>
+      ${it.status === 'medicao' ? `<button class="btn" style="margin-top:10px" id="reagVis">Reagendar visita</button>` : ''}` :
+    `<div class="row3"><div class="f"><label>Data</label><input type="date" id="vData" value="${dataSug}" min="${hojeISO}"></div>
+      <div class="f"><label>Horário</label><select id="vHora">${optsHora(horaSug)}</select></div>
+      <div class="f"><label>Técnico</label><select id="vTec">${FG.EQUIPE.tecnicos.map(x => `<option value="${x.id}">${x.nome}</option>`).join('')}</select></div></div>
+      <button class="btn btn-fire" id="okVis">📅 Confirmar visita e avisar cliente</button>`;
+  const instBox = ins ? `<div class="ok"><b>🛠️ ${FG.fmtDiaLongo(ins.data)}, às ${ins.hora}</b><span>${e.nome} · ${e.membros}</span>
+      <small>${ins.remarcar ? '⚠️ Cliente pediu para remarcar' : ins.confirmada ? '✅ Confirmado pelo cliente no WhatsApp' : '⏳ Aguardando confirmação do cliente'}</small></div>
+      ${it.status === 'instalacao' ? `<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><button class="btn btn-fire" id="okConc">✅ Marcar serviço como concluído</button><button class="btn" id="reagIns">Reagendar instalação</button></div>` : ''}` :
+    `<div class="row3"><div class="f"><label>Data</label><input type="date" id="iData" value="${FG.diasUteis(1, 12)[0]}" min="${hojeISO}"></div>
+      <div class="f"><label>Horário</label><select id="iHora">${optsHora('08:00')}</select></div>
+      <div class="f"><label>Equipe de instalação</label><select id="iEq">${FG.EQUIPE.instalacao.map(x => `<option value="${x.id}">${x.nome} · ${x.membros}</option>`).join('')}</select></div></div>
+      <button class="btn btn-fire" id="okIns">🛠️ Confirmar instalação e avisar cliente</button>`;
+  return `
+    ${it.status === 'perdido' ? `<div class="agf"><h4>❌ Proposta não aprovada</h4><p>Motivo informado pelo cliente: <b>${it.motivoPerda || 'não informado'}</b></p></div>` : ''}
+    <div class="agf ${podeVisita ? '' : 'off'}">
+      <h4>📐 Visita técnica</h4>
+      <p>${podeVisita ? 'O cliente recebe no WhatsApp a data, o horário e o nome do técnico.' : 'Disponível depois que o cliente aprovar o orçamento pelo WhatsApp.'}</p>
+      ${pref && !v ? `<div style="margin-bottom:6px;font-size:.84rem">Preferência do cliente: ${(pref.datas || []).map(d => `<span class="chip">${FG.fmtDia(d)}</span>`).join(' ')} ${pref.texto ? `<span class="chip">${pref.texto}</span>` : ''} <span class="chip" style="background:rgba(255,165,43,.15);color:var(--accent-txt)">${pref.periodo || ''}</span></div>` : ''}
+      ${podeVisita && !pref && !v ? '<div style="font-size:.82rem;color:var(--muted);margin-bottom:6px">⏳ O cliente ainda não escolheu as datas. Você pode agendar direto mesmo assim.</div>' : ''}
+      ${podeVisita ? visitaBox : ''}
+    </div>
+    <div class="agf ${v ? '' : 'off'}">
+      <h4>🛠️ Instalação</h4>
+      <p>${v ? 'O cliente recebe a data e quem da equipe vai realizar a instalação.' : 'Disponível depois de agendar a visita técnica.'}</p>
+      ${v ? instBox : ''}
+    </div>
+    ${it.avaliacao ? `<div class="agf"><h4>⭐ Avaliação do cliente</h4><span class="stars" style="font-size:1.3rem">${'★'.repeat(it.avaliacao)}${'☆'.repeat(5 - it.avaliacao)}</span>
+      ${it.feedback ? `<div class="fb"><small>${it.feedback.categoria ? 'Problema em: ' + it.feedback.categoria : 'Feedback do cliente'}</small>${it.feedback.relato || '<i style="color:var(--muted)">sem relato</i>'}</div>` : ''}
+      ${it.urgente ? `<div class="fb" style="border-left:3px solid ${ehUrgente(it) ? '#ef4444' : '#34d399'}">${ehUrgente(it) ? '🚨 <b>Urgente em aberto</b> · cliente pediu atendente' : `✅ Resolvido por ${it.urgente.resolvidoPor} · ${fmtH(it.urgente.resolvidoEm)}`}</div>` : ''}</div>` : ''}`;
+}
+function ligarAgenda(it) {
+  const salvar = (fn, msg) => { const x = FG.todos().find(y => y.id === it.id); fn(x); FG.atualizar(x); toast(msg); render(); abrir(x.id, true); aba('agenda'); };
+  const b = id => document.getElementById(id);
+  if (b('okVis')) b('okVis').onclick = () => salvar(x => {
+    x.visita = { data: b('vData').value, hora: b('vHora').value, tecnico: b('vTec').value, confirmada: false };
+    FG.mudarStatus(x, 'medicao', false); avisarCliente(x, FG.MSG.visita(x), 'visita');
+  }, 'Visita agendada · cliente avisado com data e técnico');
+  if (b('reagVis')) b('reagVis').onclick = () => salvar(x => { x.visita = null; FG.mudarStatus(x, 'aprovado', false); }, 'Escolha a nova data da visita');
+  if (b('okIns')) b('okIns').onclick = () => salvar(x => {
+    x.instalacao = { data: b('iData').value, hora: b('iHora').value, equipe: b('iEq').value, confirmada: false };
+    FG.mudarStatus(x, 'instalacao', false); avisarCliente(x, FG.MSG.instalacao(x), 'instalacao');
+  }, 'Instalação agendada · cliente avisado com data e equipe');
+  if (b('reagIns')) b('reagIns').onclick = () => salvar(x => { x.instalacao = null; FG.mudarStatus(x, 'medicao', false); }, 'Escolha a nova data da instalação');
+  if (b('okConc')) b('okConc').onclick = () => salvar(x => { FG.mudarStatus(x, 'concluido', false); avisarCliente(x, FG.MSG.concluido(x), 'concluido'); }, 'Serviço concluído · cliente convidado a avaliar');
+}
+
+/* AGENDA (visão geral) */
+function eventos(l) {
+  const ev = [];
+  l.forEach(it => {
+    if (it.visita && it.visita.data >= hojeISO && it.status === 'medicao') ev.push({ tipo: 'visita', data: it.visita.data, hora: it.visita.hora, it, resp: FG.tecnico(it.visita.tecnico).nome, ok: it.visita.confirmada, cor: '#a78bfa' });
+    if (it.instalacao && it.instalacao.data >= hojeISO && it.status === 'instalacao') ev.push({ tipo: 'instalacao', data: it.instalacao.data, hora: it.instalacao.hora, it, resp: FG.equipeInst(it.instalacao.equipe).nome, ok: it.instalacao.confirmada, alerta: it.instalacao.remarcar, cor: '#22d3ee' });
+  });
+  return ev.sort((a, b) => (a.data + a.hora).localeCompare(b.data + b.hora));
+}
+function renderAgenda() {
+  const l = lista(), ev = eventos(l), pend = l.filter(precisaAgenda);
+  $('#agPend').innerHTML = pend.length ? pend.map(x => `<div class="pend"><b>${x.cliente}</b><small style="color:var(--muted)">${x.protocolo} · ${x.cidade || '—'}</small>
+      <div class="chips">${x.visitaPref ? (x.visitaPref.datas || []).map(d => `<span class="chip">${FG.fmtDia(d)}</span>`).join('') + (x.visitaPref.texto ? `<span class="chip">${x.visitaPref.texto}</span>` : '') + `<span class="chip" style="background:rgba(255,165,43,.15);color:var(--accent-txt)">${(x.visitaPref.periodo || '').split(' (')[0]}</span>` : '<small style="color:var(--muted)">⏳ Aguardando o cliente escolher datas no WhatsApp</small>'}</div>
+      <button class="btn btn-fire" data-ag="${x.id}">Agendar visita</button></div>`).join('') : '<div class="empty" style="padding:30px 10px">Nenhum pedido aguardando agendamento 🎉</div>';
+  const dias = [...new Set(ev.filter(e => e.data <= FG.diaMais(14)).map(e => e.data))];
+  $('#agDias').innerHTML = dias.length ? dias.map(d => `<div class="day"><h4 class="${d === hojeISO ? 'hoje' : ''}">${d === hojeISO ? 'Hoje · ' : d === FG.diaMais(1) ? 'Amanhã · ' : ''}${FG.fmtDiaLongo(d)}</h4>
+      ${ev.filter(e => e.data === d).map(e => `<div class="ev" style="--c:${e.cor}" data-ag="${e.it.id}"><span class="h">${e.hora}</span>
+        <div><b>${e.tipo === 'visita' ? '📐 Visita técnica' : '🛠️ Instalação'} · ${e.it.cliente}</b><small>${e.resp} · ${e.it.cidade || '—'} · ${FG.calcular(e.it).produto}</small></div>
+        <span class="gtag" style="${e.alerta ? 'color:#f87171;background:rgba(248,113,113,.12)' : e.ok ? 'color:#34d399;background:rgba(52,211,153,.14)' : ''}">${e.alerta ? '⚠️ remarcar' : e.ok ? '✓ confirmado' : '⏳ aguardando'}</span></div>`).join('')}</div>`).join('')
+    : '<div class="empty" style="padding:30px 10px">Nenhuma visita ou instalação nos próximos dias.</div>';
+  const cont = nome => ev.filter(e => e.resp === nome).length;
+  $('#agEq').innerHTML = '<div style="font-size:.75rem;color:var(--muted);margin-bottom:4px">Técnicos de medição</div>' +
+    FG.EQUIPE.tecnicos.map(t => `<div class="eq"><div class="av" style="background:${corDe(t.nome)}">${ini(t.nome)}</div><div><b>${t.nome}</b><small>${t.cargo} · ${t.anos} anos</small></div><span class="n">${cont(t.nome)} agend.</span></div>`).join('') +
+    '<div style="font-size:.75rem;color:var(--muted);margin:14px 0 4px">Instalação</div>' +
+    FG.EQUIPE.instalacao.map(t => `<div class="eq"><div class="av" style="background:${corDe(t.nome)}">${t.nome.split(' ')[1][0]}</div><div><b>${t.nome}</b><small>${t.membros}</small></div><span class="n">${cont(t.nome)} agend.</span></div>`).join('');
+  $$('#v-agenda [data-ag]').forEach(a => a.onclick = () => { abrir(a.dataset.ag); aba('agenda'); });
+}
+
+function abrir(id, manterAba, parcial) {
+  const it = FG.todos().find(x => x.id === id); if (!it) return;
+  atual = id;
+  $('#dProto').textContent = `${it.protocolo} · criado em ${fmtH(it.criadoEm)} · origem: ${it.origem || 'WhatsApp'}`;
+  $('#dNome').textContent = it.cliente;
+  $('#dSub').textContent = `${it.telefone} · ${it.cidade || '—'} · ${it.tipoImovel || ''}`;
+  $('#dStatus').value = it.status;
+  $('#dBanner').innerHTML = bannerHTML(it); ligarBanner($('#dBanner'));
+  if (!parcial) renderCalc(it);
+  $('#t-conv').innerHTML = chatHTML(it); ligarChat($('#t-conv'), it);
+  $('#tabAgenda').textContent = precisaAgenda(it) ? 'Visita & instalação 🔴' : 'Visita & instalação';
+  $('#t-agenda').innerHTML = agendaHTML(it); ligarAgenda(it);
+  $('#tabMidias').textContent = `Fotos, vídeos e áudios (${(it.midias || []).length})`;
+  $('#t-midias').innerHTML = midiasHTML(it); ligarMidias($('#t-midias'), it);
+  $('#t-hist').innerHTML = `<ul class="hist">${[...it.historico].reverse().map(h => { const s = FG.statusInfo(h.status); return `<li style="--c:${s.cor}"><b>${s.nome}</b><small>${fmtH(h.data)}</small></li>`; }).join('')}</ul>`;
+  if (!manterAba) aba('calc');
+  $('#drawer').classList.add('on'); $('#dbg').classList.add('on');
+}
+
+function informadoHTML(it) {
+  const P = FG.precos(), d = it.informado || {};
+  const med = d.largura ? `${String(d.largura).replace('.', ',')} × ${String(d.altura || '?').replace('.', ',')} m · ${d.vaos || 1} vão(s)` : 'Não informadas · medir na visita técnica';
+  const ms = it.midias || [];
+  const linhas = [
+    ['Solução', P.produtos[d.produto]?.nome || '—'],
+    ['Medidas', med],
+    ['Vidro (preferência)', P.vidros[d.vidro]?.nome || 'Não informado'],
+    ['Acabamento', P.acabamentos[d.acabamento]?.nome || 'Não informado'],
+    ['Opcionais', (d.extras || []).map(k => P.extras[k]?.nome).filter(Boolean).join(', ') || 'Nenhum'],
+    ['Local', it.cidade || '—'],
+    ['Anexos', ms.length ? `${ms.filter(m => m.tipo === 'imagem').length} foto(s) · ${ms.filter(m => m.tipo === 'video').length} vídeo(s) · ${ms.filter(m => m.tipo === 'audio').length} áudio(s)` : 'Nenhum'],
+  ];
+  return `<div class="inf">
+    <div class="inf-h"><div><b>📋 Dados informados pelo cliente</b><small>${it.origem === 'Manual' ? 'Cadastrado manualmente' : it.origem === 'Site' ? 'Enviados pelo formulário do site' : it.origem === 'Chatbot' ? 'Enviados pelo chatbot do site' : 'Enviados pelo chatbot do WhatsApp'} · ${fmtH(it.criadoEm)}</small></div>
+    <button class="btn btn-fire" id="usarInf" type="button">📥 Usar na cotação</button></div>
+    <div class="inf-g">${linhas.map(([a, b]) => `<div><small>${a}</small><span>${b}</span></div>`).join('')}</div>
+    ${it.obs ? `<div class="inf-obs"><small>Observação</small>${it.obs}</div>` : ''}
+    ${ms.length ? `<a href="#" id="verMidias" style="font-size:.8rem;color:var(--accent-txt)">Ver fotos, vídeos e áudios →</a>` : ''}
+  </div>`;
+}
+
+const COND_OUTRA = '✍️ Outra condição (digitar)';
+const condOpts = sel => [...FG.CONDICOES, COND_OUTRA].map(c => `<option ${c === sel || (c === COND_OUTRA && sel && !FG.CONDICOES.includes(sel)) ? 'selected' : ''}>${c}</option>`).join('');
+let enviando = false;
+function renderCalc(it) {
+  const P = FG.precos(), a = it.ajustes || {};
+  const condAtual = a.cond || it.condicao || FG.CONDICOES[0];
+  const condPersonalizada = !FG.CONDICOES.includes(condAtual);
+  const opt = (obj, sel) => Object.entries(obj).map(([k, v]) => `<option value="${k}" ${k === sel ? 'selected' : ''}>${v.nome}</option>`).join('');
+  $('#t-calc').innerHTML = `
+  <div class="calc">
+    <div>
+      ${informadoHTML(it)}
+      <div class="sec-t">Cotação · especificação</div>
+      <div class="fs" id="cf">
+        <div class="f full"><label>Produto</label><select name="produto">${opt(P.produtos, it.produto)}</select></div>
+        <div class="f"><label>Largura (m)</label><input type="number" step="0.05" name="largura" value="${it.largura}"></div>
+        <div class="f"><label>Altura (m)</label><input type="number" step="0.05" name="altura" value="${it.altura}"></div>
+        <div class="f"><label>Vãos</label><input type="number" min="1" name="vaos" value="${it.vaos}"></div>
+        <div class="f"><label>Vidro</label><select name="vidro">${opt(P.vidros, it.vidro)}</select></div>
+        <div class="f full"><label>Acabamento</label><select name="acabamento">${opt(P.acabamentos, it.acabamento)}</select></div>
+        <div class="f full"><label>Opcionais</label><div class="ex">${Object.entries(P.extras).map(([k, v]) => `<label><input type="checkbox" name="extras" value="${k}" ${(it.extras || []).includes(k) ? 'checked' : ''}>${v.nome}</label>`).join('')}</div></div>
+      </div>
+      <div class="sec-t">Ajustes comerciais</div>
+      <div class="fs" id="ca">
+        <div class="f"><label>Preço base por m² (R$)</label><input type="number" name="precoM2" value="${a.precoM2 ?? P.produtos[it.produto].precoM2}"></div>
+        <div class="f"><label>Mão de obra (%)</label><input type="number" name="maoObraPct" value="${a.maoObraPct ?? P.maoObraPct}"></div>
+        <div class="f"><label>Deslocamento (R$)</label><input type="number" name="deslocamento" value="${a.deslocamento ?? P.deslocamento}"></div>
+        <div class="f"><label>Desconto (%)</label><input type="number" name="descontoPct" value="${a.descontoPct ?? 0}"></div>
+        <div class="f full"><label>Condição de pagamento (vai na proposta exatamente como escolhida)</label><select name="cond">${condOpts(condAtual)}</select></div>
+        <div class="f full" id="condLivreBox" style="${condPersonalizada ? '' : 'display:none'}"><label>Condição personalizada · negociada com o cliente</label>
+          <textarea name="condLivre" rows="2" placeholder="Ex.: Entrada de R$ 5.000 no Pix + 8x sem juros no cartão">${condPersonalizada ? condAtual : ''}</textarea></div>
+      </div>
+    </div>
+    <div class="sum" id="sum"></div>
+  </div>`;
+  const ler = () => {
+    const g = n => $(`#t-calc [name=${n}]`).value;
+    const o = { produto: g('produto'), largura: +g('largura'), altura: +g('altura'), vaos: +g('vaos') || 1, vidro: g('vidro'), acabamento: g('acabamento'), extras: $$('#t-calc [name=extras]:checked').map(x => x.value) };
+    const aj = { precoM2: +g('precoM2'), maoObraPct: +g('maoObraPct'), deslocamento: +g('deslocamento'), descontoPct: +g('descontoPct') };
+    const cond = g('cond') === COND_OUTRA ? $('#t-calc [name=condLivre]').value.trim() : g('cond');
+    return { o, aj, cond };
+  };
+  const pintar = () => {
+    const { o, aj } = ler(), c = FG.calcular(o, aj);
+    $('#sum').innerHTML = `<h4 style="margin-bottom:4px">Composição do preço</h4><p style="font-size:.72rem;color:var(--muted);margin-bottom:10px">🔒 Interno · o cliente recebe só o valor final</p>
+      <div class="ln">Área total<b>${c.area.toFixed(2).replace('.', ',')} m²</b></div>
+      <div class="ln">Vidro + perfil (${brl(c.precoM2)}/m²)<b>${brl(c.base)}</b></div>
+      ${c.linhasExtras.map(e => `<div class="ln">${e.nome}<b>${brl(e.valor)}</b></div>`).join('')}
+      <div class="ln">Mão de obra (${c.maoObraPct}%)<b>${brl(c.maoObra)}</b></div>
+      <div class="ln">Deslocamento<b>${brl(c.deslocamento)}</b></div>
+      ${c.desconto ? `<div class="ln">Desconto (${c.descontoPct}%)<b style="color:#34d399">− ${brl(c.desconto)}</b></div>` : ''}
+      <div class="tot"><span>Total</span><b>${brl(c.total)}</b></div>
+      <div class="ln" style="padding-top:6px;align-items:flex-start">Condição<b style="max-width:60%">${ler().cond || '<span style="color:#f87171">digite a condição</span>'}</b></div>
+      ${/pix/i.test(ler().cond) && /5\s*%/.test(ler().cond) ? `<div class="ln">Valor no Pix (−5%)<b>${brl(c.total * .95)}</b></div>` : ''}
+      ${(ler().cond.match(/(\d+)\s*x/i) || [])[1] ? `<div class="ln">Parcela (${ler().cond.match(/(\d+)\s*x/i)[1]}x)<b>${brl(c.total / +ler().cond.match(/(\d+)\s*x/i)[1])}</b></div>` : ''}
+      <div class="btns">
+        ${(() => { const mesmo = it.proposta != null && Math.abs(it.proposta - c.total) < .01 && it.condicao === ler().cond;
+          return mesmo ? `<button class="btn" id="enviarProp" title="Este valor e esta condição já foram enviados">✓ Já enviado ao cliente · reenviar</button>`
+            : `<button class="btn btn-wa" id="enviarProp">${it.proposta != null ? 'Enviar orçamento atualizado' : 'Enviar orçamento ao cliente'}</button>`; })()}
+        <button class="btn" id="salvarCalc">Salvar rascunho</button>
+      </div>
+      ${it.proposta ? `<p style="font-size:.75rem;color:var(--muted);margin-top:12px">Última proposta enviada: <b style="color:var(--txt)">${brl(it.proposta)}</b></p>` : ''}`;
+    $('#salvarCalc').onclick = () => { salvar(false); };
+    $('#enviarProp').onclick = () => { salvar(true); };
+  };
+  const salvar = enviar => {
+    const { o, aj, cond } = ler(), c = FG.calcular(o, aj);
+    if (!cond) { $('#t-calc [name=condLivre]').focus(); return toast('Digite a condição de pagamento negociada'); }
+    const x = FG.todos().find(y => y.id === it.id);
+    if (enviar) {
+      if (enviando) return; // ignora clique duplo
+      const ult = [...x.mensagens].reverse().find(m => m.acao === 'proposta');
+      const igual = ult && x.proposta != null && Math.abs(x.proposta - c.total) < .01 && x.condicao === cond;
+      if (igual && !confirm(`Este orçamento (${brl(c.total)} · ${cond}) já foi enviado ao cliente ${desde(ult.em)}.\n\nDeseja enviar novamente?`)) return;
+      enviando = true; setTimeout(() => { enviando = false; }, 1500);
+    }
+    Object.assign(x, o); x.ajustes = { ...aj, cond };
+    if (enviar) {
+      x.proposta = c.total;
+      x.condicao = cond;
+      const txt = FG.MSG.proposta(x, c, cond);
+      avisarCliente(x, txt, 'proposta', 'atendente');
+      if (!['aprovado', 'medicao', 'instalacao', 'concluido'].includes(x.status)) FG.mudarStatus(x, 'enviado', false);
+      x.motivoPerda = null;
+      FG.atualizar(x);
+      const fone = (x.telefone || '').replace(/\D/g, '');
+      if (FG.MODO !== 'chatbot' && fone.length >= 10) window.open(FG.waLink(txt, '55' + fone), '_blank', 'noopener');
+      toast('Orçamento enviado · a Lara vai pedir a aprovação do cliente');
+    } else { FG.atualizar(x); toast('Rascunho da cotação salvo · o cliente ainda não vê o valor'); }
+    render(); abrir(x.id, true);
+  };
+  $('#t-calc').oninput = pintar;
+  $('#t-calc').onchange = e => { if (e.target.name === 'cond') { const outra = e.target.value === COND_OUTRA; $('#condLivreBox').style.display = outra ? '' : 'none'; if (outra) $('#t-calc [name=condLivre]').focus(); } pintar(); };
+  pintar();
+  $('#usarInf').onclick = () => {
+    const d = it.informado || {}, set = (n, v) => { const el = $(`#t-calc [name=${n}]`); if (el && v !== undefined && v !== '') el.value = v; };
+    set('produto', d.produto); set('largura', d.largura || ''); set('altura', d.altura || ''); set('vaos', d.vaos || 1);
+    set('vidro', d.vidro); set('acabamento', d.acabamento);
+    $$('#t-calc [name=extras]').forEach(c => c.checked = (d.extras || []).includes(c.value));
+    const pm = FG.precos().produtos[d.produto]; if (pm) set('precoM2', pm.precoM2);
+    pintar();
+    $$('#cf input, #cf select').forEach(el => { el.classList.add('flash'); setTimeout(() => el.classList.remove('flash'), 1200); });
+    toast(d.largura ? 'Dados do cliente aplicados na cotação' : 'Produto aplicado · o cliente não informou medidas');
+  };
+  const vm = $('#verMidias'); if (vm) vm.onclick = e => { e.preventDefault(); aba('midias'); };
+}
+
+/* CHAT reutilizável */
+function chatHTML(it) {
+  return `<div class="wa-chat"><div class="hd"><div class="av" style="background:${corDe(it.cliente)};color:#170a04">${ini(it.cliente)}</div><div><b>${it.cliente}</b><small>${it.telefone} · ${it.protocolo}</small></div></div>
+  <div class="wa-msgs">${it.mensagens.map(m => `<div class="m ${m.de}"><span class="who">${m.de === 'bot' ? '🤖 Lara · assistente' : m.de === 'atendente' ? '👤 ' + (m.autor || 'Equipe FireGuard') : it.cliente.split(' ')[0]}</span>${m.midia ? FG.midiaHTML(m.midia) + (m.midia.analise?.ambiente ? `<div class="ai">✨ ${m.midia.analise.ambiente}</div>` : m.midia.analise?.duracao ? `<div class="ai">${m.midia.analise.duracao}</div>` : '') : m.txt.replace(/\*(.+?)\*/g, '<b>$1</b>')}<time>${fmtH(m.em)}</time></div>`).join('')}</div>
+  <div class="qr"><button>Já estou analisando seu pedido, te retorno em instantes!</button><button>Pode me mandar uma foto do vão com uma trena aberta?</button><button>Consigo uma condição especial para você 😉</button></div>
+  <form><input placeholder="Responder pelo WhatsApp..."><button aria-label="Enviar">➤</button></form></div>`;
+}
+function ligarChat(root, it) {
+  const box = root.querySelector('.wa-msgs'); box.scrollTop = 1e6;
+  FG.hidratar(root); zoom(root);
+  root.querySelectorAll('.fg-md').forEach(el => el.addEventListener(el.tagName === 'IMG' ? 'load' : 'loadedmetadata', () => { box.scrollTop = 1e6; }, { once: true }));
+  const enviar = txt => {
+    if (!txt.trim()) return;
+    // quem digita aqui é uma pessoa: assume a conversa e pausa a Lara
+    if (FG.todos().find(y => y.id === it.id)?.humano?.status !== 'atendendo') assumir(it.id, true);
+    const x = FG.todos().find(y => y.id === it.id);
+    avisarCliente(x, txt, null, 'atendente');
+    FG.atualizar(x); render();
+    if (atual === x.id) abrir(x.id, true, true);
+    if (convSel === x.id) renderConv();
+  };
+  root.querySelector('form').onsubmit = e => { e.preventDefault(); const i = e.target.querySelector('input'); enviar(i.value); i.value = ''; };
+  root.querySelectorAll('.qr button').forEach(b => b.onclick = () => enviar(b.textContent));
+}
+
+/* CONVERSAS */
+function renderConv() {
+  const l = lista().filter(x => x.mensagens.length).sort((a, b) => (prioridade(b) - prioridade(a)) || (new Date(b.mensagens.at(-1).em) - new Date(a.mensagens.at(-1).em)));
+  if (!convSel || !l.find(x => x.id === convSel)) convSel = l[0]?.id;
+  $('#convs').innerHTML = l.map(x => { const m = x.mensagens.at(-1);
+    return `<div class="cv ${x.id === convSel ? 'on' : ''} ${ehUrgente(x) ? 'urg' : precisaAtendente(x) ? 'hum' : ''}" data-id="${x.id}"><div class="av" style="background:${corDe(x.cliente)}">${ini(x.cliente)}</div><div class="t"><b>${x.cliente}<time>${fmtD(m.em)}</time></b>${ehUrgente(x) ? `<span class="utag">🚨 URGENTE · ${x.urgente.nota}/5</span>` : precisaAtendente(x) ? '<span class="htag">🙋 Pediu atendente</span>' : x.humano?.status === 'atendendo' ? `<span class="gtag">👤 ${FG.primeiro(x.humano.por)}</span>` : ''}<p>${m.de === 'cliente' ? '' : '✓✓ '}${(m.txt || '').replace(/<[^>]+>/g, '').replace(/\*/g, '')}</p></div></div>`; }).join('');
+  $$('.cv').forEach(c => c.onclick = () => { convSel = c.dataset.id; renderConv(); });
+  const it = l.find(x => x.id === convSel);
+  if (!it) { $('#convMain').innerHTML = ''; $('#convCtx').innerHTML = ''; return; }
+  $('#convMain').innerHTML = (bannerHTML(it) ? `<div style="border-radius:14px;overflow:hidden;margin-bottom:10px;border:1px solid var(--line)">${bannerHTML(it).replace('class="banner', 'style="padding:12px 16px" class="banner')}</div>` : '') + chatHTML(it);
+  ligarBanner($('#convMain')); ligarChat($('#convMain'), it);
+  $('#convMain').style.cssText = 'display:flex;flex-direction:column;min-height:0'; $('#convMain .wa-chat').style.flex = '1';
+  const s = FG.statusInfo(it.status), c = FG.calcular(it, it.ajustes);
+  $('#convCtx').innerHTML = `<h4>${it.cliente}</h4><span class="badge" style="color:${s.cor};background:${s.cor}1f;margin:8px 0 12px">${s.nome}</span>
+    <div class="ln">Protocolo<b>${it.protocolo}</b></div><div class="ln">Produto<b>${c.produto}</b></div><div class="ln">Área<b>${c.area.toFixed(2)} m²</b></div>
+    <div class="ln">Orçamento<b>${valorTxt(it)}</b></div>${it.condicao ? `<div class="ln">Pagamento<b>${it.condicao}</b></div>` : ''}<div class="ln">Local<b>${it.cidade || '—'}</b></div>
+    ${it.visita ? `<div class="ln">Visita<b>${FG.fmtDia(it.visita.data)} ${it.visita.hora} · ${FG.primeiro(FG.tecnico(it.visita.tecnico).nome)}</b></div>` : it.visitaPref ? `<div class="ln">Pref. visita<b>${prefTxt(it.visitaPref)}</b></div>` : ''}
+    ${it.instalacao ? `<div class="ln">Instalação<b>${FG.fmtDia(it.instalacao.data)} · ${FG.equipeInst(it.instalacao.equipe).nome}</b></div>` : ''}
+    ${(it.midias || []).length ? `<div style="margin-top:14px;font-size:.8rem;color:var(--muted)">Arquivos do cliente (${it.midias.length})</div><div class="mstrip">${it.midias.map(m => `<div class="${m.tipo === 'audio' ? 'au' : ''}">${FG.midiaHTML(m)}</div>`).join('')}</div>` : ''}
+    <button class="btn btn-fire" style="width:100%;justify-content:center;margin-top:14px" onclick="abrir('${it.id}')">Abrir orçamento</button>
+    <div class="bot-card"><b>🤖 Lara · assistente virtual</b>Responde 24h, coleta o pedido, recebe fotos e áudios, pede a aprovação do orçamento, as datas da visita e confirma cada etapa com o cliente.</div>`;
+  FG.hidratar($('#convCtx')); zoom($('#convCtx'));
+}
+
+/* PREÇOS */
+function renderPrecos() {
+  const P = FG.precos();
+  const tab = (titulo, grupo, campo, suf) => `<div class="box"><h3>${titulo}</h3><table><tr><th>Item</th><th>${suf}</th></tr>${Object.entries(P[grupo]).map(([k, v]) => `<tr><td>${v.nome}</td><td><input type="number" step="0.01" data-g="${grupo}" data-k="${k}" data-c="${campo}" value="${v[campo]}"></td></tr>`).join('')}</table></div>`;
+  $('#precosBox').innerHTML = tab('Produtos', 'produtos', 'precoM2', 'R$ / m²') + tab('Vidros', 'vidros', 'fator', 'Multiplicador') + tab('Acabamentos', 'acabamentos', 'fator', 'Multiplicador') +
+    `<div class="box"><h3>Opcionais e custos</h3><table><tr><th>Item</th><th>Valor</th></tr>${Object.entries(P.extras).map(([k, v]) => `<tr><td>${v.nome} <small style="color:var(--muted)">(${v.tipo === 'm2' ? 'por m²' : 'unid.'})</small></td><td><input type="number" data-g="extras" data-k="${k}" data-c="valor" value="${v.valor}"></td></tr>`).join('')}
+    <tr><td>Mão de obra (%)</td><td><input type="number" data-root="maoObraPct" value="${P.maoObraPct}"></td></tr><tr><td>Deslocamento (R$)</td><td><input type="number" data-root="deslocamento" value="${P.deslocamento}"></td></tr></table></div>`;
+}
+$('#savePrecos').onclick = () => {
+  const P = JSON.parse(JSON.stringify(FG.precos()));
+  $$('#precosBox input').forEach(i => { if (i.dataset.root) P[i.dataset.root] = +i.value; else P[i.dataset.g][i.dataset.k][i.dataset.c] = +i.value; });
+  FG.salvarPrecos(P); toast('Tabela de preços atualizada'); render();
+};
+$('#restorePrecos').onclick = () => { FG.salvarPrecos(FG.precosPadrao); renderPrecos(); toast('Tabela padrão restaurada'); };
+
+/* novo orçamento manual */
+$('#btnNovo').onclick = () => {
+  const nome = prompt('Nome do cliente:'); if (!nome) return;
+  const tel = prompt('WhatsApp do cliente:', '(11) 9') || '';
+  const it = FG.novo({ cliente: nome, telefone: tel, cidade: '', tipoImovel: 'Apartamento', produto: 'envidracamento', vidro: 'temp8', acabamento: 'natural', largura: 3, altura: 2.4, vaos: 1, extras: [], obs: '', origem: 'Manual' });
+  render(); abrir(it.id);
+};
+$('#reset').onclick = e => { e.preventDefault(); if (confirm('Restaurar os dados de demonstração?')) { FG.resetar(); render(); toast('Demo restaurada'); } };
+
+function render() {
+  const l = FG.todos();
+  const nNovo = l.filter(x => x.status === 'novo').length, nHum = l.filter(x => precisaAtendente(x) || ehUrgente(x)).length, nAg = l.filter(precisaAgenda).length;
+  $('#cNovo').textContent = nNovo || ''; $('#cHum').textContent = nHum || ''; $('#cAg').textContent = nAg || '';
+  const v = $('.view.on').id;
+  if (v === 'v-dash') renderDash();
+  if (v === 'v-orc') renderKanban();
+  if (v === 'v-chat') renderConv();
+  if (v === 'v-agenda') renderAgenda();
+  if (v === 'v-precos') renderPrecos();
+}
+// sincroniza em tempo real com o site aberto em outra aba
+addEventListener('storage', e => {
+  if (e.key === FG.KEY) { render(); if (atual) abrir(atual, true, true); toast('🔔 Nova mensagem ou atualização do cliente'); }
+  if (e.key === 'fg_tema') FG.tema(e.newValue);
+});
+$('#themeBtn').onclick = () => FG.tema(document.documentElement.dataset.theme === 'light' ? 'dark' : 'light');
+render();
+</script>
+</body>
+</html>

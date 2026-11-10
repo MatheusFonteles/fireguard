@@ -1,0 +1,23 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "fireguard",
+      "runtimeExecutable": "python",
+      "runtimeArgs": [
+        "fireguard/servidor.py",
+        "5500"
+      ],
+      "port": 5500
+    },
+    {
+      "name": "fireguard-chatbot",
+      "runtimeExecutable": "python",
+      "runtimeArgs": [
+        "fireguard-chatbot/servidor.py",
+        "5501"
+      ],
+      "port": 5501
+    }
+  ]
+}

@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FireGuard · Simulador WhatsApp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script>try{document.documentElement.dataset.theme=localStorage.getItem('fg_tema')||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark')}catch(e){}</script>
+<style>
+:root{
+  --bg:#09090b;--bg2:#111114;--bg3:#18181c;--line:rgba(255,255,255,.08);--line2:rgba(255,255,255,.14);
+  --txt:#f5f2ed;--muted:#a1a1aa;--fire:#ff5a1f;--fire2:#ffa52b;--accent-txt:#ffa52b;--grad:linear-gradient(120deg,#ff5a1f,#ffa52b);
+  --wa-bg:#0b141a;--wa-head:#202c33;--wa-in:#202c33;--wa-out:#005c4b;--wa-txt:#e9edef;--wa-sub:#8696a0;--wa-input:#2a3942;--wa-link:#53bdeb;
+  --phone:#1a1a1d;color-scheme:dark;
+}
+:root[data-theme="light"]{
+  --bg:#f6f4f0;--bg2:#ffffff;--bg3:#f1ede7;--line:rgba(20,15,10,.08);--line2:rgba(20,15,10,.15);
+  --txt:#17130f;--muted:#5f5a53;--accent-txt:#d9480f;
+  --wa-bg:#efeae2;--wa-head:#f0f2f5;--wa-in:#ffffff;--wa-out:#d9fdd3;--wa-txt:#111b21;--wa-sub:#667781;--wa-input:#ffffff;--wa-link:#027eb5;
+  --phone:#2b2b30;color-scheme:light;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:radial-gradient(50% 60% at 80% 30%,rgba(255,90,31,.14),transparent 70%),var(--bg);color:var(--txt);font-family:Inter,system-ui,sans-serif;min-height:100vh;line-height:1.55}
+h1,h2,h3{font-family:Sora,sans-serif;letter-spacing:-.02em;line-height:1.15}
+a{color:inherit}
+.wrap{width:min(1180px,100% - 32px);margin:0 auto;display:grid;grid-template-columns:1fr 400px;gap:56px;align-items:center;min-height:100vh;padding:40px 0}
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:34px}
+.brand img{width:48px;height:48px;border-radius:50%}
+.brand b{font-family:Sora;font-size:1.2rem}.brand b span{color:var(--fire)}
+.brand small{display:block;color:var(--muted);font-size:.75rem}
+.theme-btn{margin-left:auto;width:40px;height:40px;border-radius:50%;border:1px solid var(--line2);background:transparent;color:var(--txt);cursor:pointer;display:grid;place-items:center}
+.theme-btn:hover{border-color:var(--fire2)}
+:root[data-theme="light"] .i-sun,:root:not([data-theme="light"]) .i-moon{display:none}
+.eyebrow{font-size:.75rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent-txt);font-weight:600}
+h1{font-size:clamp(2rem,4vw,3.2rem);margin:14px 0 16px}
+.grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{color:var(--muted);font-size:1.05rem;max-width:560px}
+.feats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:28px 0}
+.feats div{padding:16px;border:1px solid var(--line);border-radius:14px;background:var(--bg2);font-size:.86rem;color:var(--muted)}
+.feats b{display:block;color:var(--txt);font-size:.92rem;margin-bottom:2px}
+.btns{display:flex;gap:10px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:999px;font-weight:600;font-size:.9rem;border:1px solid var(--line2);background:var(--bg2);color:var(--txt);cursor:pointer;text-decoration:none;font-family:inherit}
+.btn:hover{border-color:var(--fire2)}
+.btn-fire{background:var(--grad);color:#170a04;border:0}
+.tips{margin-top:26px;padding:16px 18px;border-radius:14px;border:1px dashed var(--line2);font-size:.85rem;color:var(--muted)}
+.tips b{color:var(--txt)}
+.tips ol{margin:8px 0 0 18px;display:grid;gap:4px}
+
+/* NOVO CLIENTE */
+dialog{margin:auto;border:1px solid var(--line2);border-radius:18px;background:var(--bg2);color:var(--txt);padding:26px;width:min(380px,92vw)}
+dialog::backdrop{background:rgba(0,0,0,.6)}
+dialog label{display:block;font-size:.78rem;color:var(--muted);margin:14px 0 6px}
+dialog input{width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line2);background:var(--bg3);color:var(--txt);font:inherit;outline:none}
+dialog input:focus{border-color:var(--fire)}
+dialog .row{display:flex;gap:8px;justify-content:flex-end;margin-top:20px}
+
+/* CELULAR */
+.phone{width:400px;max-width:100%;height:min(820px,calc(100vh - 60px));min-height:600px;background:var(--phone);border-radius:48px;padding:14px;box-shadow:0 40px 90px -30px rgba(0,0,0,.8),inset 0 0 0 2px rgba(255,255,255,.08);position:relative}
+.phone::before{content:"";position:absolute;top:24px;left:50%;transform:translateX(-50%);width:96px;height:26px;border-radius:20px;background:#000;z-index:3}
+.screen{height:100%;border-radius:36px;overflow:hidden;display:flex;flex-direction:column;background:var(--wa-bg);color:var(--wa-txt)}
+.sbar{height:46px;display:flex;justify-content:space-between;align-items:center;padding:6px 28px 0;font-size:.78rem;font-weight:600;background:var(--wa-head)}
+.chat{display:flex;flex-direction:column;flex:1;min-height:0}
+.chat header{background:var(--wa-head);padding:8px 14px 12px;display:flex;align-items:center;gap:10px}
+.chat header .back{font-size:1.3rem;color:var(--wa-sub)}
+.chat header img{width:38px;height:38px;border-radius:50%}
+.chat header b{font-size:.92rem;display:flex;align-items:center;gap:5px}
+.chat header b i{width:15px;height:15px;border-radius:50%;background:#25d366;display:inline-grid;place-items:center;font-style:normal;font-size:.6rem;color:#fff}
+.chat header small{color:var(--wa-sub);font-size:.72rem}
+.chat header .ics{margin-left:auto;display:flex;gap:16px;color:var(--wa-sub)}
+.msgs{flex:1;overflow-y:auto;padding:14px 12px;display:flex;flex-direction:column;gap:6px}
+.day{align-self:center;font-size:.7rem;background:var(--wa-in);color:var(--wa-sub);padding:4px 10px;border-radius:8px;margin-bottom:4px}
+.enc{align-self:center;text-align:center;font-size:.7rem;background:rgba(255,214,102,.18);color:var(--wa-txt);padding:6px 10px;border-radius:8px;max-width:88%;margin-bottom:6px}
+.m{max-width:84%;padding:7px 10px 5px;border-radius:9px;font-size:.86rem;line-height:1.42;white-space:pre-line;box-shadow:0 1px .5px rgba(0,0,0,.13);animation:pop .25s}
+.m time{display:block;text-align:right;font-size:.64rem;color:var(--wa-sub);margin-top:1px}
+.m.in{background:var(--wa-in);align-self:flex-start;border-top-left-radius:2px}
+.m.out{background:var(--wa-out);align-self:flex-end;border-top-right-radius:2px}
+.m.typing{color:var(--wa-sub);font-style:italic}
+.m a{color:var(--wa-link)}
+.m .who{display:block;font-size:.7rem;font-weight:600;color:var(--wa-link)}
+.m .fg-md{display:block;width:230px;max-width:100%;border-radius:8px;margin:2px 0 4px}
+.m audio.fg-md{height:40px}
+@keyframes pop{from{opacity:0;transform:translateY(6px)}}
+.quick{display:flex;flex-wrap:wrap;gap:6px;align-self:flex-start;max-width:92%}
+.quick button{background:var(--wa-in);border:1px solid var(--line2);color:var(--wa-link);padding:7px 12px;border-radius:18px;font-size:.8rem;cursor:pointer;font-family:inherit}
+.quick button:hover{filter:brightness(1.1)}
+.quick.multi button.on{background:#00a884;color:#fff;border-color:#00a884}
+.quick button.ok{font-weight:600}
+.quick button:disabled{opacity:.45;cursor:default}
+#chatForm{display:flex;gap:6px;padding:8px 10px 14px;background:var(--wa-head);align-items:center}
+#chatForm input[type=text]{flex:1;min-width:0;background:var(--wa-input);border:0;border-radius:22px;padding:10px 14px;color:var(--wa-txt);font:inherit;font-size:.88rem;outline:none}
+.ic{width:36px;height:36px;border-radius:50%;border:0;background:none;color:var(--wa-sub);cursor:pointer;display:grid;place-items:center;flex-shrink:0}
+.ic:hover{color:var(--wa-txt)}
+.send{width:42px;height:42px;border-radius:50%;border:0;background:#00a884;color:#fff;cursor:pointer;display:grid;place-items:center;flex-shrink:0}
+.send.rec{background:#e53935;animation:pulseRec 1s infinite}
+.recbar{display:none;flex:1;align-items:center;gap:8px;font-size:.85rem;padding-left:6px}
+.recbar i{width:10px;height:10px;border-radius:50%;background:#e53935;animation:blink 1s infinite}
+.recbar button{margin-left:auto;background:none;border:0;color:var(--wa-sub);cursor:pointer;font-size:.78rem}
+.chat.recording .recbar{display:flex}.chat.recording input[type=text],.chat.recording .ic.clip{display:none}
+@keyframes pulseRec{50%{box-shadow:0 0 0 8px rgba(229,57,53,.25)}}
+@keyframes blink{50%{opacity:.2}}
+.pill{display:inline-flex;align-items:center;gap:8px;font-size:.78rem;color:var(--muted);margin-bottom:12px}
+.pill i{width:8px;height:8px;border-radius:50%;background:#25d366;box-shadow:0 0 0 3px rgba(37,211,102,.2)}
+
+@media(max-width:960px){
+  .wrap{grid-template-columns:1fr;gap:30px}
+  .phone{margin:0 auto;height:740px}
+}
+@media(max-width:520px){
+  .feats{grid-template-columns:1fr}
+  .phone{border-radius:0;padding:0;height:calc(100vh - 20px);box-shadow:none}
+  .phone::before{display:none}.screen{border-radius:16px}.sbar{display:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section>
+    <div class="brand"><img src="assets/logo.jpg" alt="FireGuard"><div><b><span>FIRE</span>GUARD</b><small>Chatbot WhatsApp + Painel</small></div>
+      <button class="theme-btn" onclick="FG.tema(document.documentElement.dataset.theme==='light'?'dark':'light')" aria-label="Alternar modo claro/escuro" title="Modo claro/escuro">
+        <svg class="i-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg class="i-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+    </div>
+    <span class="eyebrow">Simulador de atendimento</span>
+    <h1>O WhatsApp da FireGuard <span class="grad">atendendo sozinho</span>, 24h.</h1>
+    <p class="lead">Este celular simula o WhatsApp de um cliente conversando com o assistente da FireGuard. Tudo o que ele envia (medidas, fotos, vídeos e áudios) chega na hora ao painel da equipe, que faz a cotação e responde por lá.</p>
+    <div class="feats">
+      <div><b>📝 Coleta do pedido</b>Solução, medidas, vãos e local, sem mostrar preço ao cliente.</div>
+      <div><b>📷 Fotos e vídeos</b>Recebe e faz uma pré-análise de cada arquivo antes do especialista.</div>
+      <div><b>🙋 Atendente humano</b>A qualquer momento o cliente pede uma pessoa, e o painel destaca quem pediu.</div>
+      <div><b>✅ Aprovação e agenda</b>O cliente aprova pelo chat, escolhe datas da visita e fica sabendo quem vai atendê-lo.</div>
+    </div>
+    <div class="btns">
+      <a class="btn btn-fire" href="painel.html" target="_blank" rel="noopener">Abrir painel da equipe ↗</a>
+      <button class="btn" id="novoCli">👤 Simular novo cliente</button>
+    </div>
+    <div class="tips"><b>Roteiro rápido da demonstração</b>
+      <ol>
+        <li>Deixe este simulador e o painel lado a lado.</li>
+        <li>No celular, toque em <b>Quero um orçamento</b> e converse com a Lara: solução, medidas (ex.: <b>4,2 x 2,4</b>), vãos e bairro.</li>
+        <li>Envie uma foto pelo 📎 ou grave um áudio no 🎤.</li>
+        <li>No painel, abra o pedido, toque em <b>Usar na cotação</b> e em <b>Enviar orçamento ao cliente</b>.</li>
+        <li>No celular, <b>aprove a proposta</b> e escolha os melhores dias para a visita técnica.</li>
+        <li>No painel, em <b>Agenda</b>, confirme dia, horário e técnico. Depois, a instalação e a equipe.</li>
+        <li>A qualquer momento, escreva <b>atendente</b>: o pedido aparece em destaque no painel.</li>
+      </ol>
+    </div>
+  </section>
+
+  <div class="phone" aria-label="Simulação do WhatsApp do cliente">
+    <div class="screen">
+      <div class="sbar"><span id="clock">9:41</span><span>📶 🔋</span></div>
+      <div class="chat" id="chat">
+        <header>
+          <span class="back">‹</span>
+          <img src="assets/logo.jpg" alt="">
+          <div><b>FireGuard <i>✓</i></b><small id="botStatus">online</small></div>
+          <div class="ics"><span>📹</span><span>📞</span></div>
+        </header>
+        <div class="msgs" id="msgs"></div>
+        <form id="chatForm">
+          <button type="button" class="ic clip" id="clipBtn" aria-label="Anexar foto, vídeo ou áudio" title="Anexar">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.4 11.1l-9.2 9.2a6 6 0 0 1-8.5-8.5l9.2-9.2a4 4 0 0 1 5.7 5.7l-9.2 9.2a2 2 0 0 1-2.8-2.8l8.5-8.5"/></svg></button>
+          <input type="file" id="chatFile" accept="image/*,video/*,audio/*" multiple hidden>
+          <input type="text" id="chatIn" placeholder="Mensagem" autocomplete="off">
+          <div class="recbar"><i></i><span id="recT">0:00</span><span>Gravando…</span><button type="button" id="recCancel">Cancelar</button></div>
+          <button type="button" class="send" id="sendBtn" aria-label="Gravar áudio">
+            <svg class="s-mic" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V22h2v-3.1a7 7 0 0 0 6-6.9z"/></svg>
+            <svg class="s-send" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
+            <svg class="s-stop" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<dialog id="dlg">
+  <form method="dialog" id="dlgForm">
+    <h3>Simular novo cliente</h3>
+    <p style="color:var(--muted);font-size:.85rem;margin-top:6px">No WhatsApp real, nome e número chegam automaticamente com a mensagem.</p>
+    <label>Nome do contato no WhatsApp</label><input id="dNome" required>
+    <label>Número</label><input id="dTel" required>
+    <div class="row"><button class="btn" value="cancel" formnovalidate>Cancelar</button><button class="btn btn-fire" value="ok">Iniciar conversa</button></div>
+  </form>
+</dialog>
+
+<script src="assets/config.js?v=10"></script>
+<script src="assets/data.js?v=10"></script>
+<script src="assets/chatbot.js?v=10"></script>
+<script>
+const CLI_KEY = 'fg_sim_cliente';
+const exemplos = [['Lívia Carvalho', '(11) 98123-4567'], ['Eduardo Prates', '(11) 99456-7788'], ['Sofia Mendes', '(19) 99231-0045'], ['Rafael Nogueira', '(11) 97654-3210']];
+let cliente;
+try { cliente = JSON.parse(sessionStorage.getItem(CLI_KEY)); } catch {}
+if (!cliente) { const [n, t] = exemplos[Math.floor(Math.random() * exemplos.length)]; cliente = { nome: n, telefone: t }; }
+try { sessionStorage.setItem(CLI_KEY, JSON.stringify(cliente)); } catch {}
+
+const msgs = document.getElementById('msgs');
+const CAB = '<div class="day">HOJE</div><div class="enc">🔒 As mensagens são protegidas com a criptografia de ponta a ponta. Esta é uma conta comercial.</div>';
+msgs.innerHTML = CAB;
+FGBot.init({ modo: 'whatsapp', cliente });
+FGBot.abrir('Oi, boa tarde!');
+
+document.getElementById('novoCli').onclick = () => {
+  const [n, t] = exemplos[Math.floor(Math.random() * exemplos.length)];
+  document.getElementById('dNome').value = n; document.getElementById('dTel').value = t;
+  document.getElementById('dlg').showModal();
+};
+document.getElementById('dlg').addEventListener('close', () => {
+  if (document.getElementById('dlg').returnValue !== 'ok') return;
+  cliente = { nome: document.getElementById('dNome').value.trim(), telefone: document.getElementById('dTel').value.trim() };
+  try { sessionStorage.setItem(CLI_KEY, JSON.stringify(cliente)); } catch {}
+  FGBot.novoCliente(cliente, 'Olá! Vi o perfil de vocês e gostaria de um orçamento.');
+  msgs.insertAdjacentHTML('afterbegin', CAB);
+});
+const relogio = () => document.getElementById('clock').textContent = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+relogio(); setInterval(relogio, 30000);
+addEventListener('storage', e => { if (e.key === 'fg_tema') FG.tema(e.newValue); });
+</script>
+</body>
+</html>

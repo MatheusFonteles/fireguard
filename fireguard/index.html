@@ -1,0 +1,833 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FireGuard — Anteparos corta-fogo e envidraçamento de sacadas</title>
+<meta name="description" content="FireGuard: anteparos corta-fogo, envidraçamento de sacadas e soluções inteligentes em vidro para imóveis de médio e alto padrão.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script>try{document.documentElement.dataset.theme=localStorage.getItem('fg_tema')||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark')}catch(e){}</script>
+<style>
+:root{
+  --bg:#09090b;--bg2:#111114;--bg3:#18181c;--line:rgba(255,255,255,.08);--line2:rgba(255,255,255,.14);
+  --txt:#f5f2ed;--muted:#a1a1aa;--fire:#ff5a1f;--fire2:#ffa52b;--silver:#d7dae0;--wa:#25d366;
+  --grad:linear-gradient(120deg,var(--fire),var(--fire2));
+  --r:18px;--navbg:rgba(9,9,11,.82);--chipbg:rgba(15,15,18,.78);--estbg:#1c120d;--accent-txt:var(--fire2);
+  --wa-bg:#0b141a;--wa-head:#202c33;--wa-in:#202c33;--wa-out:#005c4b;--wa-txt:#e9edef;--wa-sub:#8696a0;--wa-input:#2a3942;--wa-link:#53bdeb;
+  color-scheme:dark;
+}
+:root[data-theme="light"]{
+  --bg:#f8f6f2;--bg2:#efebe5;--bg3:#ffffff;--line:rgba(20,15,10,.09);--line2:rgba(20,15,10,.16);
+  --txt:#17130f;--muted:#5d5852;--navbg:rgba(248,246,242,.88);--chipbg:rgba(255,255,255,.88);--estbg:#fff1e8;--accent-txt:#d9480f;
+  --wa-bg:#efeae2;--wa-head:#f0f2f5;--wa-in:#ffffff;--wa-out:#d9fdd3;--wa-txt:#111b21;--wa-sub:#667781;--wa-input:#ffffff;--wa-link:#027eb5;
+  color-scheme:light;
+}
+.theme-btn{width:40px;height:40px;border-radius:50%;border:1px solid var(--line2);background:transparent;color:var(--txt);cursor:pointer;display:grid;place-items:center;transition:.25s}
+.theme-btn:hover{border-color:var(--accent-txt);color:var(--accent-txt)}
+.theme-btn svg{width:18px;height:18px}
+:root[data-theme="light"] .i-sun,:root:not([data-theme="light"]) .i-moon{display:none}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--txt);font-family:Inter,system-ui,sans-serif;line-height:1.6;overflow-x:hidden}
+h1,h2,h3,h4{font-family:Sora,sans-serif;line-height:1.1;letter-spacing:-.02em}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+.wrap{width:min(1200px,100% - 40px);margin-inline:auto}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent-txt);font-weight:600}
+.eyebrow::before{content:"";width:28px;height:1px;background:var(--grad)}
+.grad-txt{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:14px 26px;border-radius:999px;font-weight:600;font-size:.95rem;border:1px solid transparent;cursor:pointer;transition:.25s;font-family:inherit}
+.btn-fire{background:var(--grad);color:#120804;box-shadow:0 10px 30px -10px rgba(255,90,31,.6)}
+.btn-fire:hover{transform:translateY(-2px);box-shadow:0 16px 40px -10px rgba(255,90,31,.75)}
+.btn-ghost{border-color:var(--line2);color:var(--txt);background:rgba(255,255,255,.03)}
+.btn-ghost:hover{border-color:var(--accent-txt);color:var(--accent-txt)}
+.btn-wa{background:var(--wa);color:#04210f}
+.btn svg{width:18px;height:18px}
+section{padding:110px 0;position:relative}
+.sec-head{max-width:720px;margin-bottom:56px}
+.sec-head h2{font-size:clamp(2rem,4vw,3.1rem);margin:16px 0 14px}
+.sec-head p{color:var(--muted);font-size:1.05rem}
+
+/* NAV */
+.nav{position:fixed;inset:0 0 auto;z-index:50;transition:.3s;border-bottom:1px solid transparent}
+.nav.scrolled{background:var(--navbg);backdrop-filter:blur(14px);border-color:var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:78px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:46px;height:46px;border-radius:50%;object-fit:cover}
+.brand b{font-family:Sora;font-size:1.25rem;letter-spacing:.02em}
+.brand b span{color:var(--fire)}
+.nav ul{display:flex;gap:30px;list-style:none;font-size:.92rem;color:var(--muted)}
+.nav ul a:hover{color:var(--txt)}
+.nav .actions{display:flex;gap:10px;align-items:center}
+.nav .btn{padding:10px 18px;font-size:.86rem}
+.burger{display:none;background:none;border:0;color:var(--txt);cursor:pointer}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;padding:130px 0 80px;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background:
+  radial-gradient(60% 50% at 78% 40%,rgba(255,90,31,.20),transparent 70%),
+  radial-gradient(40% 40% at 10% 90%,rgba(255,165,43,.08),transparent 70%)}
+.hero .wrap{display:grid;grid-template-columns:1.05fr 1fr;gap:60px;align-items:center;position:relative}
+.hero h1{font-size:clamp(2.5rem,5.4vw,4.6rem);font-weight:700;margin:22px 0}
+.hero p.lead{font-size:1.15rem;color:var(--muted);max-width:540px}
+.hero .ctas{display:flex;gap:14px;margin:36px 0 44px;flex-wrap:wrap}
+.stats{display:flex;gap:40px;flex-wrap:wrap}
+.stats div b{display:block;font-family:Sora;font-size:1.9rem;font-weight:700}
+.stats div span{font-size:.82rem;color:var(--muted)}
+
+.scene{position:relative;aspect-ratio:4/4.4;border-radius:28px;overflow:hidden;border:1px solid var(--line2);background:#1b1210 url(assets/img/hero-terraco.jpg) center/cover}
+.scene::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.15),transparent 40%,rgba(0,0,0,.35))}
+.scene .frame{position:absolute;inset:5% 5% 7% 5%;border:6px solid #1f1f23;border-bottom-width:10px;border-radius:4px;display:grid;grid-template-columns:repeat(5,1fr);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+.scene .pane{border-right:3px solid #2c2c31;position:relative;background:linear-gradient(115deg,rgba(255,255,255,.10),rgba(255,255,255,.02) 40%,rgba(255,255,255,.12) 55%,rgba(255,255,255,.02) 70%);backdrop-filter:blur(.5px);transition:transform 1.4s cubic-bezier(.7,0,.2,1)}
+.scene .pane:last-child{border-right:0}
+.scene .pane::after{content:"";position:absolute;left:50%;top:48%;width:3px;height:26px;background:#888;border-radius:3px;opacity:.6}
+.scene.open .pane:nth-child(1){transform:translateX(0)}
+.scene.open .pane:nth-child(2){transform:translateX(-96%)}
+.scene.open .pane:nth-child(3){transform:translateX(-192%)}
+.scene.open .pane:nth-child(4){transform:translateX(-288%)}
+.scene.open .pane:nth-child(5){transform:translateX(-384%)}
+.chip{position:absolute;display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:14px;background:var(--chipbg);backdrop-filter:blur(12px);border:1px solid var(--line2);font-size:.85rem;box-shadow:0 20px 40px -20px #000}
+.chip i{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:rgba(255,90,31,.15);color:var(--accent-txt);font-style:normal}
+.chip small{display:block;color:var(--muted);font-size:.72rem}
+.chip.c1{left:-4%;top:14%;animation:float 6s ease-in-out infinite}
+.chip.c2{right:-3%;bottom:24%;animation:float 6s 1.5s ease-in-out infinite}
+.toggle-scene{position:absolute;right:16px;top:16px;font-size:.75rem;padding:8px 12px;border-radius:999px;background:rgba(0,0,0,.5);border:1px solid var(--line2);color:var(--txt);cursor:pointer}
+@keyframes float{50%{transform:translateY(-10px)}}
+
+/* TRUST BAR */
+.trust{padding:34px 0;border-block:1px solid var(--line);background:var(--bg2)}
+.trust .wrap{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap;color:var(--muted);font-size:.88rem}
+.trust span{display:flex;align-items:center;gap:10px}
+.trust span::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--grad)}
+
+/* SOLUÇÕES */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.card{background:linear-gradient(180deg,var(--bg3),var(--bg2));border:1px solid var(--line);border-radius:var(--r);padding:34px;position:relative;overflow:hidden;transition:.35s}
+.card:hover{border-color:rgba(255,90,31,.45);transform:translateY(-6px)}
+.card::after{content:"";position:absolute;inset:auto -40% -60% auto;width:260px;height:260px;border-radius:50%;background:radial-gradient(rgba(255,90,31,.18),transparent 70%);opacity:0;transition:.4s}
+.card:hover::after{opacity:1}
+.card .ico{width:56px;height:56px;border-radius:14px;display:grid;place-items:center;background:rgba(255,90,31,.1);border:1px solid rgba(255,90,31,.25);margin-bottom:26px}
+.card .ico svg{width:28px;height:28px;stroke:var(--fire2)}
+.card h3{font-size:1.35rem;margin-bottom:12px}
+.card p{color:var(--muted);font-size:.95rem}
+.card ul{list-style:none;margin:20px 0 26px;display:grid;gap:8px;font-size:.9rem}
+.card li::before{content:"→ ";color:var(--fire)}
+.card a.more{font-weight:600;color:var(--accent-txt);font-size:.9rem}
+
+/* DIFERENCIAIS */
+.diff{background:var(--bg2)}
+.diff-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.feat{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.feat div{padding:26px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.015)}
+.feat b{display:block;font-family:Sora;margin:10px 0 6px}
+.feat span{color:var(--muted);font-size:.88rem}
+.feat em{font-style:normal;font-size:1.4rem}
+.quote-big{font-family:Sora;font-size:clamp(1.6rem,2.6vw,2.2rem);font-weight:300;line-height:1.35}
+.quote-big b{font-weight:700}
+.sign{margin-top:28px;display:flex;align-items:center;gap:14px;color:var(--muted);font-size:.9rem}
+.sign img{width:52px;height:52px;border-radius:50%}
+
+/* PROCESSO */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;counter-reset:s}
+.step{padding:30px 26px;border-top:2px solid var(--line2);position:relative}
+.step::before{counter-increment:s;content:"0" counter(s);font-family:Sora;font-size:2.6rem;font-weight:800;color:transparent;-webkit-text-stroke:1px rgba(255,165,43,.6);display:block;margin-bottom:14px}
+.step:hover{border-color:var(--fire)}
+.step h4{font-size:1.1rem;margin-bottom:8px}
+.step p{color:var(--muted);font-size:.9rem}
+
+/* PROJETOS */
+.gallery{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:220px;gap:16px}
+.tile{color:#fff;border-radius:16px;position:relative;overflow:hidden;border:1px solid var(--line);display:flex;align-items:flex-end;padding:20px}
+.tile::before{content:"";position:absolute;inset:0;transition:transform .8s}
+.tile:hover::before{transform:scale(1.07)}
+.tile div{position:relative;z-index:1}
+.tile b{font-family:Sora;display:block}
+.tile span{font-size:.8rem;color:#e5e5e5;opacity:.8}
+.tile::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 40%,rgba(0,0,0,.75))}
+.tile::before{background-size:cover;background-position:center}
+.t1{grid-column:span 2;grid-row:span 2}.t1::before{background-image:url(assets/img/proj-cobertura.jpg)}
+.t2::before{background-image:url(assets/img/proj-churrasqueira.jpg)}
+.t3::before{background-image:url(assets/img/proj-lazer.jpg)}
+.t4{grid-column:span 2}.t4::before{background-image:url(assets/img/proj-sacada-mar.jpg);background-position:center 60%}
+.t5{grid-column:span 2}.t5::before{background-image:url(assets/img/proj-torre.jpg)}
+.t6{grid-column:span 2}.t6::before{background-image:url(assets/img/proj-rooftop.jpg)}
+.card .ph{margin:-34px -34px 0;height:200px;background-size:cover;background-position:center;position:relative}
+.card .ph::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 45%,var(--bg3))}
+.card .ph+.ico{position:relative;z-index:1;margin-top:-28px;background:var(--bg3);box-shadow:0 0 0 1px rgba(255,90,31,.25)}
+.diff-img{border-radius:22px;overflow:hidden;aspect-ratio:16/9;margin-bottom:34px;border:1px solid var(--line);position:relative}
+.diff-img img{width:100%;height:100%;object-fit:cover}
+.diff-img span{position:absolute;left:16px;bottom:14px;color:#fff;font-size:.78rem;background:rgba(0,0,0,.45);padding:6px 12px;border-radius:999px;backdrop-filter:blur(6px)}
+.credit{font-size:.7rem;color:var(--muted);margin-top:14px}
+
+/* ORÇAMENTO */
+.quote{background:radial-gradient(60% 50% at 0% 0%,rgba(255,90,31,.10),transparent 70%),var(--bg2)}
+.q-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:30px;align-items:start}
+.panel{background:var(--bg);border:1px solid var(--line);border-radius:22px;padding:36px}
+.q-step{margin-bottom:34px}
+.q-step h4{font-size:1rem;display:flex;gap:12px;align-items:center;margin-bottom:18px}
+.q-step h4 i{font-style:normal;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:.8rem;background:var(--grad);color:#120804}
+.opts{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.opt input{display:none}
+.opt label{display:block;padding:16px 18px;border-radius:14px;border:1px solid var(--line2);cursor:pointer;transition:.2s;height:100%}
+.opt label b{display:block;font-size:.95rem}
+.opt label small{color:var(--muted);font-size:.8rem}
+.opt input:checked+label{border-color:var(--fire);background:rgba(255,90,31,.08);box-shadow:inset 0 0 0 1px var(--fire)}
+.fields{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.fields.two{grid-template-columns:1fr 1fr}
+.f label{display:block;font-size:.8rem;color:var(--muted);margin-bottom:6px}
+.f input,.f select,.f textarea{width:100%;background:var(--bg3);border:1px solid var(--line2);border-radius:12px;padding:13px 14px;color:var(--txt);font:inherit;font-size:.95rem;outline:none;transition:.2s}
+.f input:focus,.f select:focus,.f textarea:focus{border-color:var(--fire)}
+.f.full{grid-column:1/-1}
+.swatches{display:flex;gap:12px;flex-wrap:wrap}
+.sw input{display:none}
+.sw label{display:flex;align-items:center;gap:10px;padding:8px 14px 8px 8px;border-radius:999px;border:1px solid var(--line2);cursor:pointer;font-size:.85rem}
+.sw label i{width:26px;height:26px;border-radius:50%;border:2px solid rgba(255,255,255,.2)}
+.sw input:checked+label{border-color:var(--fire)}
+.checks{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ck{display:flex;gap:10px;align-items:center;padding:12px 14px;border:1px solid var(--line);border-radius:12px;font-size:.88rem;cursor:pointer}
+.ck input{accent-color:var(--fire);width:17px;height:17px}
+.est{position:sticky;top:100px;background:linear-gradient(160deg,var(--estbg),var(--bg) 60%);border:1px solid rgba(255,90,31,.3)}
+.est h3{font-size:1.1rem;margin-bottom:6px}
+.est .val{font-family:Sora;font-size:2.1rem;font-weight:700;margin:20px 0 4px}
+.est .rows{border-top:1px dashed var(--line2);margin-top:22px;padding-top:18px;display:grid;gap:10px;font-size:.88rem}
+.est .rows div{display:flex;justify-content:space-between;gap:14px;color:var(--muted)}
+.est .rows div b{color:var(--txt);font-weight:500;text-align:right}
+.est .note{font-size:.76rem;color:var(--muted);margin-top:20px}
+.est .btn{width:100%;margin-top:22px}
+
+/* ACOMPANHAR */
+.track-box{display:grid;grid-template-columns:1fr 1.3fr;gap:40px;align-items:start}
+.track-form{display:flex;gap:10px;margin-top:26px}
+.track-form input{flex:1;background:var(--bg3);border:1px solid var(--line2);border-radius:999px;padding:14px 20px;color:var(--txt);font:inherit;outline:none;text-transform:uppercase}
+.track-form input:focus{border-color:var(--fire)}
+.hint{font-size:.8rem;color:var(--muted);margin-top:12px}
+.hint code{color:var(--accent-txt);cursor:pointer}
+#trackResult{min-height:200px}
+.tl{list-style:none;margin-top:24px;position:relative}
+.tl li{position:relative;padding:0 0 22px 36px;color:var(--muted);font-size:.92rem}
+.tl li::before{content:"";position:absolute;left:8px;top:6px;width:12px;height:12px;border-radius:50%;border:2px solid var(--line2);background:var(--bg)}
+.tl li::after{content:"";position:absolute;left:13px;top:20px;bottom:-4px;width:2px;background:var(--line)}
+.tl li:last-child::after{display:none}
+.tl li.done{color:var(--txt)}
+.tl li.done::before{background:var(--fire);border-color:var(--fire)}
+.tl li.done::after{background:var(--fire)}
+.tl li.cur::before{box-shadow:0 0 0 6px rgba(255,90,31,.25)}
+.tl small{display:block;font-size:.75rem;color:var(--muted)}
+.badge{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;font-size:.78rem;font-weight:600}
+.badge::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+
+/* FAQ */
+.faq{max-width:860px}
+details{border-bottom:1px solid var(--line);padding:22px 0}
+summary{cursor:pointer;font-family:Sora;font-size:1.08rem;list-style:none;display:flex;justify-content:space-between;gap:20px}
+summary::after{content:"+";color:var(--fire);font-size:1.4rem;line-height:1;transition:.3s}
+details[open] summary::after{transform:rotate(45deg)}
+details p{color:var(--muted);margin-top:12px}
+
+/* CTA + FOOTER */
+.cta-band{padding:80px 0}
+.cta-band .box{border-radius:28px;padding:60px;background:linear-gradient(120deg,#ff5a1f,#ff9b2b);color:#160904;display:flex;justify-content:space-between;align-items:center;gap:30px;flex-wrap:wrap;position:relative;overflow:hidden}
+.cta-band h2{font-size:clamp(1.8rem,3.4vw,2.7rem);max-width:620px}
+.cta-band .btn{background:#0b0b0d;color:#fff}
+footer{border-top:1px solid var(--line);padding:60px 0 30px;color:var(--muted);font-size:.9rem}
+footer .cols{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px}
+footer h5{color:var(--txt);font-family:Sora;font-size:.95rem;margin-bottom:14px}
+footer ul{list-style:none;display:grid;gap:8px}
+footer a:hover{color:var(--accent-txt)}
+footer .bottom{border-top:1px solid var(--line);padding-top:24px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:.8rem}
+
+/* FLOATING WHATSAPP + CHATBOT */
+.fab{position:fixed;right:24px;bottom:24px;z-index:80;display:flex;flex-direction:column;gap:12px;align-items:flex-end}
+.fab button,.fab a{width:60px;height:60px;border-radius:50%;border:0;display:grid;place-items:center;cursor:pointer;box-shadow:0 14px 30px -8px rgba(0,0,0,.6);transition:.25s}
+.fab .wa{background:var(--wa);animation:pulse 2.4s infinite}
+.fab .bot{background:var(--grad)}
+.fab button:hover,.fab a:hover{transform:scale(1.08)}
+.fab svg{width:30px;height:30px}
+.fab .tip{position:absolute;right:72px;bottom:12px;white-space:nowrap;background:#fff;color:#111;font-size:.82rem;font-weight:600;padding:8px 14px;border-radius:10px;opacity:0;transform:translateX(10px);transition:.3s;pointer-events:none}
+.fab .tip.show{opacity:1;transform:none}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(37,211,102,.55)}70%{box-shadow:0 0 0 18px rgba(37,211,102,0)}100%{box-shadow:0 0 0 0 rgba(37,211,102,0)}}
+
+.chat{position:fixed;right:24px;bottom:100px;width:390px;max-width:calc(100vw - 32px);height:600px;max-height:calc(100vh - 130px);z-index:90;border-radius:20px;overflow:hidden;display:flex;flex-direction:column;background:var(--wa-bg);color:var(--wa-txt);box-shadow:0 30px 80px -20px rgba(0,0,0,.6);border:1px solid var(--line2);transform:translateY(20px) scale(.96);opacity:0;pointer-events:none;transition:.3s;transform-origin:bottom right}
+.chat.open{transform:none;opacity:1;pointer-events:auto}
+.chat header{background:var(--wa-head);padding:14px 16px;display:flex;align-items:center;gap:12px}
+.chat header img{width:40px;height:40px;border-radius:50%}
+.chat header b{font-size:.95rem;display:block;font-family:Inter}
+.chat header small{color:var(--wa-sub);font-size:.75rem}
+.chat header button{margin-left:auto;background:none;border:0;color:var(--wa-sub);font-size:1.4rem;cursor:pointer}
+.chat .msgs{flex:1;overflow-y:auto;padding:18px 14px;display:flex;flex-direction:column;gap:8px;background:var(--wa-bg)}
+.m{max-width:82%;padding:8px 12px 6px;border-radius:10px;font-size:.88rem;line-height:1.45;position:relative;white-space:pre-line;animation:pop .25s;box-shadow:0 1px .5px rgba(0,0,0,.13)}
+.m time{display:block;text-align:right;font-size:.66rem;color:var(--wa-sub);margin-top:2px}
+.m.in{background:var(--wa-in);align-self:flex-start;border-top-left-radius:2px}
+.m.out{background:var(--wa-out);align-self:flex-end;border-top-right-radius:2px}
+.m.typing{color:var(--wa-sub);font-style:italic}
+.m a{color:var(--wa-link)}
+.m .who{display:block;font-size:.7rem;font-weight:600;color:var(--wa-link)}
+.quick.multi button.on{background:#00a884;color:#fff;border-color:#00a884}
+.quick button.ok{font-weight:600}
+.quick button:disabled{opacity:.45;cursor:default}
+.m .fg-md{display:block;max-width:240px;width:100%;border-radius:8px;margin:2px 0 4px}
+.m audio.fg-md{width:240px;height:40px}
+@keyframes pop{from{opacity:0;transform:translateY(6px)}}
+.quick{display:flex;flex-wrap:wrap;gap:6px;align-self:flex-start;max-width:90%}
+.quick button{background:var(--wa-in);border:1px solid var(--line2);color:var(--wa-link);padding:8px 12px;border-radius:18px;font-size:.82rem;cursor:pointer;font-family:inherit}
+.quick button:hover{filter:brightness(1.1)}
+.chat form{display:flex;gap:6px;padding:10px;background:var(--wa-head);align-items:center}
+.chat form input[type=text]{flex:1;min-width:0;background:var(--wa-input);border:0;border-radius:22px;padding:11px 16px;color:var(--wa-txt);font:inherit;font-size:.9rem;outline:none}
+.chat form .ic{width:38px;height:38px;border-radius:50%;border:0;background:none;color:var(--wa-sub);cursor:pointer;display:grid;place-items:center;flex-shrink:0}
+.chat form .ic:hover{color:var(--wa-txt)}
+.chat form .send{width:42px;height:42px;border-radius:50%;border:0;background:#00a884;color:#fff;cursor:pointer;display:grid;place-items:center;flex-shrink:0}
+.chat form .send.rec{background:#e53935;animation:pulseRec 1s infinite}
+.recbar{display:none;flex:1;align-items:center;gap:10px;color:var(--wa-txt);font-size:.88rem;padding-left:8px}
+.recbar i{width:10px;height:10px;border-radius:50%;background:#e53935;animation:blink 1s infinite}
+.recbar button{margin-left:auto;background:none;border:0;color:var(--wa-sub);cursor:pointer;font-size:.8rem}
+.chat.recording .recbar{display:flex}.chat.recording input[type=text],.chat.recording .ic.clip{display:none}
+@keyframes pulseRec{50%{box-shadow:0 0 0 8px rgba(229,57,53,.25)}}
+@keyframes blink{50%{opacity:.2}}
+.dropz{border:1.5px dashed var(--line2);border-radius:16px;padding:22px;text-align:center;cursor:pointer;transition:.2s;color:var(--muted);font-size:.9rem;display:block}
+.dropz:hover,.dropz.over{border-color:var(--fire);background:rgba(255,90,31,.05);color:var(--txt)}
+.dropz b{color:var(--txt);display:block;font-size:1rem;margin:6px 0 2px}
+.thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;margin-top:14px}
+.thumbs:empty{display:none}
+.th{position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--line2);background:var(--bg3);aspect-ratio:1;display:grid;place-items:center;font-size:.75rem;color:var(--muted);text-align:center}
+.th img,.th video{width:100%;height:100%;object-fit:cover}
+.th .k{position:absolute;left:6px;bottom:6px;background:rgba(0,0,0,.6);color:#fff;font-size:.66rem;padding:2px 7px;border-radius:6px}
+.th .x{position:absolute;right:6px;top:6px;width:24px;height:24px;border-radius:50%;border:0;background:rgba(0,0,0,.65);color:#fff;cursor:pointer}
+.th audio{width:92%}
+.media-actions{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;align-items:center}
+.media-actions .btn{padding:10px 16px;font-size:.85rem}
+.btn.rec{border-color:#e53935;color:#e53935}
+
+/* MODAL */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);z-index:100;display:none;place-items:center;padding:20px}
+.modal.open{display:grid}
+.modal .panel{max-width:480px;text-align:center;animation:pop .3s}
+.modal .proto{font-family:Sora;font-size:2rem;margin:10px 0;letter-spacing:.05em}
+.modal p{color:var(--muted);margin-bottom:22px}
+.modal .row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+
+.reveal{opacity:0;transform:translateY(30px);transition:1s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+
+@media (max-width:980px){
+  .nav ul,.nav .actions .btn-ghost{display:none}
+  .burger{display:block}
+  .nav.menu ul{display:flex;flex-direction:column;position:absolute;top:78px;left:0;right:0;background:var(--bg);padding:24px;border-bottom:1px solid var(--line)}
+  .hero .wrap,.diff-grid,.q-grid,.track-box{grid-template-columns:1fr}
+  .cards,.steps{grid-template-columns:1fr 1fr}
+  .gallery{grid-template-columns:1fr 1fr}
+  footer .cols{grid-template-columns:1fr 1fr}
+  .est{position:static}
+}
+@media (max-width:620px){
+  section{padding:80px 0}
+  .cards,.steps,.opts,.checks,.feat,.fields,.fields.two{grid-template-columns:1fr}
+  .gallery{grid-template-columns:1fr;grid-auto-rows:200px}
+  .t1,.t4,.t5,.t6{grid-column:auto;grid-row:auto}
+  .panel{padding:24px}
+  .cta-band .box{padding:36px}
+  .chip{display:none}
+  .nav .actions .btn-fire{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <div class="wrap">
+    <a href="#" class="brand"><img src="assets/logo.jpg" alt="FireGuard"><b><span>FIRE</span>GUARD</b></a>
+    <ul>
+      <li><a href="#solucoes">Soluções</a></li>
+      <li><a href="#diferenciais">Diferenciais</a></li>
+      <li><a href="#projetos">Projetos</a></li>
+      <li><a href="#orcamento">Orçamento</a></li>
+      <li><a href="#acompanhar">Acompanhar pedido</a></li>
+    </ul>
+    <div class="actions">
+      <button class="theme-btn" onclick="FG.tema(document.documentElement.dataset.theme==='light'?'dark':'light')" aria-label="Alternar modo claro/escuro" title="Modo claro/escuro">
+        <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+      <a href="painel.html" class="btn btn-ghost">Área restrita</a>
+      <a href="#orcamento" class="btn btn-fire">Solicitar orçamento</a>
+      <button class="burger" aria-label="Menu" onclick="document.getElementById('nav').classList.toggle('menu')">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="eyebrow">Anteparos corta-fogo · Envidraçamento</span>
+      <h1>Proteção que <span class="grad-txt">não abre mão</span> da vista.</h1>
+      <p class="lead">Projetamos e instalamos sistemas em vidro que unem segurança certificada, design minimalista e acabamento impecável — para sacadas, coberturas e empreendimentos de alto padrão.</p>
+      <div class="ctas">
+        <a href="#orcamento" class="btn btn-fire">Solicitar orçamento
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="btn btn-ghost js-wa" data-msg="Olá! Vim pelo site da FireGuard e gostaria de falar com um especialista.">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .6l-.4.6-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.7-.1l1-1.2c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg>
+          Falar no WhatsApp</a>
+      </div>
+      <div class="stats">
+        <div><b data-count="1200">0</b><span>sacadas entregues</span></div>
+        <div><b data-count="15">0</b><span>anos de experiência</span></div>
+        <div><b>5 anos</b><span>de garantia</span></div>
+      </div>
+    </div>
+    <div class="reveal" style="position:relative">
+      <div class="scene" id="scene">
+                <div class="frame"><div class="pane"></div><div class="pane"></div><div class="pane"></div><div class="pane"></div><div class="pane"></div></div>
+        <button class="toggle-scene" onclick="document.getElementById('scene').classList.toggle('open')">⇆ Abrir / fechar painéis</button>
+      </div>
+      <div class="chip c1"><i>🛡️</i><div><b>Laudo técnico + ART</b><small>Conforme normas ABNT</small></div></div>
+      <div class="chip c2"><i>🔥</i><div><b>Vidro corta-fogo</b><small>Resistência certificada</small></div></div>
+    </div>
+  </div>
+</header>
+
+<div class="trust">
+  <div class="wrap">
+    <span>ABNT NBR 16259 · envidraçamento de sacadas</span>
+    <span>Vidros temperados e laminados de procedência</span>
+    <span>Instalação com equipe própria</span>
+    <span>Atendimento a condomínios e construtoras</span>
+  </div>
+</div>
+
+<!-- SOLUÇÕES -->
+<section id="solucoes">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Soluções</span>
+      <h2>Engenharia em vidro, sob medida para o seu espaço.</h2>
+      <p>Três linhas de produto pensadas para quem exige segurança, conforto térmico e estética de alto padrão.</p>
+    </div>
+    <div class="cards">
+      <article class="card reveal">
+        <div class="ph" style="background-image:url(assets/img/card-anteparo.jpg)"></div>
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/><path d="M12 7c-1 2 1 3 0 5s-2 1-2 3a2 2 0 0 0 4 0"/></svg></div>
+        <h3>Anteparos corta-fogo</h3>
+        <p>Barreiras em vidro certificado para churrasqueiras, áreas gourmet e fachadas, atendendo às exigências do Corpo de Bombeiros e do condomínio.</p>
+        <ul><li>Vidro corta-fogo certificado</li><li>Laudo técnico e ART</li><li>Ideal para varandas gourmet</li></ul>
+        <a href="#orcamento" class="more" data-prod="anteparo">Orçar anteparo →</a>
+      </article>
+      <article class="card reveal">
+        <div class="ph" style="background-image:url(assets/img/card-envidracamento.jpg)"></div>
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><rect x="3" y="4" width="18" height="16" rx="1"/><path d="M8 4v16M13 4v16M18 4v16"/></svg></div>
+        <h3>Envidraçamento de sacadas</h3>
+        <p>Sistema retrátil de painéis deslizantes e giratórios que abre 100% do vão. Protege contra vento, chuva e ruído sem esconder a vista.</p>
+        <ul><li>Abertura total do vão</li><li>Perfis em 4 acabamentos</li><li>Vidro temperado 8 ou 10 mm</li></ul>
+        <a href="#orcamento" class="more" data-prod="envidracamento">Orçar envidraçamento →</a>
+      </article>
+      <article class="card reveal">
+        <div class="ph" style="background-image:url(assets/img/card-inteligente.jpg)"></div>
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><rect x="5" y="2" width="14" height="20" rx="3"/><path d="M9 18h6M12 6v6M9 9h6"/></svg></div>
+        <h3>Soluções inteligentes</h3>
+        <p>Cortinas de vidro automatizadas, persianas integradas e películas de controle solar, comandadas pelo celular ou assistente de voz.</p>
+        <ul><li>Automação por app e voz</li><li>Persiana integrada</li><li>Controle solar e UV</li></ul>
+        <a href="#orcamento" class="more" data-prod="cortina">Orçar solução inteligente →</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- DIFERENCIAIS -->
+<section id="diferenciais" class="diff">
+  <div class="wrap diff-grid">
+    <div class="reveal">
+      <div class="diff-img"><img src="assets/img/diferenciais.jpg" alt="Varanda envidraçada ao entardecer" loading="lazy"><span>Imagem ilustrativa</span></div>
+      <span class="eyebrow">Por que FireGuard</span>
+      <p class="quote-big" style="margin-top:22px">Cada projeto é tratado como <b>uma peça única</b>: medição a laser, projeto técnico, vidro selecionado e uma instalação limpa, sem obra e sem surpresas.</p>
+      <div class="sign"><img src="assets/logo.jpg" alt=""><div><b style="color:var(--txt)">Equipe FireGuard</b><br>Engenharia e instalação</div></div>
+    </div>
+    <div class="feat reveal">
+      <div><em>📐</em><b>Medição a laser</b><span>Visita técnica com precisão milimétrica e projeto 3D.</span></div>
+      <div><em>🏢</em><b>Aprovação no condomínio</b><span>Cuidamos da documentação e do padrão de fachada.</span></div>
+      <div><em>🧼</em><b>Obra limpa</b><span>Instalação em 1 dia, sem quebra-quebra.</span></div>
+      <div><em>🛠️</em><b>Pós-venda real</b><span>Manutenção preventiva e garantia de 5 anos.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESSO -->
+<section>
+  <div class="wrap">
+    <div class="sec-head reveal"><span class="eyebrow">Como funciona</span><h2>Do primeiro contato à entrega, tudo acompanhado online.</h2></div>
+    <div class="steps">
+      <div class="step reveal"><h4>Orçamento inicial</h4><p>Envie medidas, fotos ou um áudio pelo site ou WhatsApp, sem compromisso.</p></div>
+      <div class="step reveal"><h4>Visita técnica</h4><p>Medição precisa e escolha de vidros e acabamentos.</p></div>
+      <div class="step reveal"><h4>Proposta final</h4><p>Valor fechado, prazos e condições enviados no seu WhatsApp.</p></div>
+      <div class="step reveal"><h4>Instalação</h4><p>Equipe própria, obra limpa e acompanhamento por protocolo.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJETOS -->
+<section id="projetos" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head reveal"><span class="eyebrow">Projetos</span><h2>Alguns espaços que transformamos.</h2></div>
+    <div class="gallery">
+      <div class="tile t1 reveal"><div><b>Cobertura com vista</b><span>Guarda-corpo em vidro laminado</span></div></div>
+      <div class="tile t2 reveal"><div><b>Churrasqueira gourmet</b><span>Anteparo corta-fogo + laudo</span></div></div>
+      <div class="tile t3 reveal"><div><b>Área de lazer</b><span>Cortina de vidro automatizada</span></div></div>
+      <div class="tile t4 reveal"><div><b>Sacada panorâmica</b><span>Envidraçamento retrátil · perfil preto</span></div></div>
+      <div class="tile t5 reveal"><div><b>Torre residencial</b><span>Padrão de fachada · 48 unidades</span></div></div>
+      <div class="tile t6 reveal"><div><b>Rooftop corporativo</b><span>Fechamento em vidro temperado</span></div></div>
+    </div>
+    <p class="credit">Imagens ilustrativas (Unsplash) — substituir por fotos reais de obras da FireGuard.</p>
+  </div>
+</section>
+
+<!-- ORÇAMENTO -->
+<section id="orcamento" class="quote">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Orçamento online</span>
+      <h2>Solicite agora e receba no WhatsApp.</h2>
+      <p>Informe as medidas aproximadas. Um especialista confirma tudo na visita técnica, sem compromisso.</p>
+    </div>
+    <div class="q-grid">
+      <form class="panel reveal" id="qForm" novalidate>
+        <div class="q-step">
+          <h4><i>1</i>Qual solução você procura?</h4>
+          <div class="opts" id="optProd"></div>
+        </div>
+        <div class="q-step">
+          <h4><i>2</i>Medidas e especificação</h4>
+          <div class="fields">
+            <div class="f"><label>Largura do vão (m)</label><input type="number" name="largura" step="0.05" min="0.5" value="4" required></div>
+            <div class="f"><label>Altura (m)</label><input type="number" name="altura" step="0.05" min="0.5" value="2.4" required></div>
+            <div class="f"><label>Quantidade de vãos</label><input type="number" name="vaos" min="1" value="1" required></div>
+            <div class="f full"><label>Tipo de vidro (preferência)</label><select name="vidro" id="selVidro"></select></div>
+          </div>
+          <div style="margin-top:18px"><div class="f"><label>Acabamento do perfil (preferência)</label></div><div class="swatches" id="sw"></div></div>
+          <div style="margin-top:18px"><div class="f"><label>Opcionais</label></div><div class="checks" id="ex"></div></div>
+        </div>
+        <div class="q-step">
+          <h4><i>3</i>Fotos, vídeos ou áudio do local <small style="color:var(--muted);font-weight:400;font-family:Inter">(opcional)</small></h4>
+          <label class="dropz" id="dz">
+            <input type="file" id="fIn" accept="image/*,video/*,audio/*" multiple hidden>
+            <div style="font-size:1.6rem">📷 🎥 🎤</div>
+            <b>Arraste ou clique para enviar</b>
+            Fotos do vão, um vídeo mostrando a sacada ou um áudio explicando o que você precisa. Até 8 arquivos de 50 MB.
+          </label>
+          <div class="media-actions">
+            <button type="button" class="btn btn-ghost" id="recBtn">🎤 Gravar áudio</button>
+            <span id="recInfo" style="font-size:.8rem;color:var(--muted)">Nossa equipe analisa tudo antes da visita técnica.</span>
+          </div>
+          <div class="thumbs" id="thumbs"></div>
+        </div>
+        <div class="q-step" style="margin-bottom:0">
+          <h4><i>4</i>Seus dados</h4>
+          <div class="fields two">
+            <div class="f"><label>Nome completo</label><input name="cliente" placeholder="Como podemos te chamar?" required></div>
+            <div class="f"><label>WhatsApp</label><input name="telefone" placeholder="(11) 90000-0000" required></div>
+            <div class="f"><label>Cidade / bairro</label><input name="cidade" placeholder="São Paulo · Jardins"></div>
+            <div class="f"><label>Tipo de imóvel</label><select name="tipoImovel"><option>Apartamento</option><option>Cobertura</option><option>Casa em condomínio</option><option>Condomínio / síndico</option><option>Construtora / incorporadora</option><option>Comercial</option></select></div>
+            <div class="f full"><label>Observações (opcional)</label><textarea name="obs" rows="3" placeholder="Ex.: sacada gourmet, preciso de laudo para o condomínio..."></textarea></div>
+          </div>
+          <label class="ck" style="margin-top:16px;border:0;padding:0;color:var(--muted)"><input type="checkbox" required id="lgpd" checked> Autorizo a FireGuard a entrar em contato pelo WhatsApp sobre este orçamento (LGPD).</label>
+        </div>
+      </form>
+      <aside class="panel est reveal">
+        <span class="eyebrow">Resumo da solicitação</span>
+        <h3 id="eProd" style="margin-top:12px;font-size:1.4rem">Envidraçamento de sacada</h3>
+        <div class="rows">
+          <div>Medidas<b id="eMed">—</b></div>
+          <div>Área aproximada<b id="eArea">—</b></div>
+          <div>Vidro<b id="eVidro">—</b></div>
+          <div>Acabamento<b id="eAcab">—</b></div>
+          <div>Opcionais<b id="eExtras">Nenhum</b></div>
+          <div>Anexos<b id="eAnexos">Nenhum</b></div>
+        </div>
+        <div style="margin-top:20px;padding:14px 16px;border-radius:14px;background:rgba(255,90,31,.08);font-size:.86rem;line-height:1.5">
+          <b style="display:block;margin-bottom:4px">Como funciona</b>
+          Nossa equipe analisa suas informações e envia o orçamento detalhado, com valores, no seu WhatsApp em até 2h úteis.
+        </div>
+        <button class="btn btn-wa" form="qForm" type="submit">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z"/></svg>
+          Enviar solicitação pelo WhatsApp</button>
+        <p class="note">Medidas aproximadas já ajudam. Tudo é confirmado na visita técnica gratuita.</p>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ACOMPANHAR -->
+<section id="acompanhar">
+  <div class="wrap track-box">
+    <div class="reveal">
+      <span class="eyebrow">Área do cliente</span>
+      <h2 style="font-size:clamp(2rem,4vw,3rem);margin:16px 0">Acompanhe seu pedido em tempo real.</h2>
+      <p style="color:var(--muted)">Digite o protocolo recebido no WhatsApp para ver o andamento, valores e as últimas mensagens.</p>
+      <form class="track-form" id="tForm"><input id="tInput" placeholder="FG-0000" aria-label="Protocolo"><button class="btn btn-fire">Consultar</button></form>
+      <p class="hint">Protocolos de demonstração: <code>FG-2608</code> · <code>FG-2598</code> · <code>FG-2584</code></p>
+    </div>
+    <div class="panel reveal" id="trackResult">
+      <div style="color:var(--muted);text-align:center;padding:50px 0">
+        <div style="font-size:2.4rem">🔎</div>Seu pedido aparecerá aqui.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head reveal"><span class="eyebrow">Dúvidas frequentes</span><h2>Perguntas que nossos clientes fazem.</h2></div>
+    <div class="faq reveal">
+      <details open><summary>Preciso de aprovação do condomínio?</summary><p>Na maioria dos casos sim. A FireGuard prepara o memorial descritivo e segue o padrão de fachada definido em assembleia, facilitando a aprovação.</p></details>
+      <details><summary>Qual a diferença entre anteparo corta-fogo e envidraçamento?</summary><p>O anteparo é uma barreira de segurança contra propagação de chamas, geralmente exigida junto a churrasqueiras. O envidraçamento fecha a sacada contra vento e chuva mantendo a abertura total.</p></details>
+      <details><summary>Quanto tempo leva a instalação?</summary><p>Após a aprovação, a produção leva de 10 a 20 dias úteis. A instalação costuma ser concluída em um único dia.</p></details>
+      <details><summary>Quais as formas de pagamento?</summary><p>Pix com desconto à vista ou cartão em até 10x sem juros. Para construtoras, condições especiais por volume.</p></details>
+    </div>
+  </div>
+</section>
+
+<div class="cta-band">
+  <div class="wrap">
+    <div class="box reveal">
+      <h2>Sua sacada merece segurança e sofisticação.</h2>
+      <a class="btn js-wa" data-msg="Olá! Gostaria de agendar uma visita técnica com a FireGuard.">Agendar visita técnica →</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="cols">
+      <div><a href="#" class="brand"><img src="assets/logo.jpg" alt=""><b style="color:var(--txt)"><span>FIRE</span>GUARD</b></a>
+        <p style="margin-top:16px;max-width:320px">Anteparos corta-fogo, envidraçamento de sacadas e soluções inteligentes em vidro.</p></div>
+      <div><h5>Soluções</h5><ul><li><a href="#solucoes">Anteparos corta-fogo</a></li><li><a href="#solucoes">Envidraçamento</a></li><li><a href="#solucoes">Automação</a></li></ul></div>
+      <div><h5>Atendimento</h5><ul><li><a href="#orcamento">Orçamento online</a></li><li><a href="#acompanhar">Acompanhar pedido</a></li><li><a class="js-wa" href="#">WhatsApp</a></li></ul></div>
+      <div><h5>Contato</h5><ul><li>(11) 99999-9999</li><li>contato@fireguard.com.br</li><li>São Paulo · SP</li></ul></div>
+    </div>
+    <div class="bottom"><span>© 2026 FireGuard. Todos os direitos reservados.</span><span>Protótipo de apresentação</span></div>
+  </div>
+</footer>
+
+<!-- FLOATING -->
+<div class="fab">
+  <span class="tip" id="tip">Fale com a gente 👋</span>
+  <button class="bot" id="botBtn" aria-label="Abrir assistente virtual">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#120804" stroke-width="2"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M8.5 12h.01M12 12h.01M15.5 12h.01"/></svg>
+  </button>
+  <a class="wa js-wa" aria-label="WhatsApp" data-msg="Olá! Vim pelo site da FireGuard e gostaria de um atendimento.">
+    <svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .6l-.4.6-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.7-.1l1-1.2c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg>
+  </a>
+</div>
+
+<div class="chat" id="chat" role="dialog" aria-label="Assistente FireGuard">
+  <header>
+    <img src="assets/logo.jpg" alt="">
+    <div><b>FireGuard · Assistente</b><small id="botStatus">online · responde na hora</small></div>
+    <button onclick="toggleChat(false)" aria-label="Fechar">×</button>
+  </header>
+  <div class="msgs" id="msgs"></div>
+  <form id="chatForm">
+    <button type="button" class="ic clip" id="clipBtn" aria-label="Anexar foto, vídeo ou áudio" title="Anexar foto, vídeo ou áudio">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.4 11.1l-9.2 9.2a6 6 0 0 1-8.5-8.5l9.2-9.2a4 4 0 0 1 5.7 5.7l-9.2 9.2a2 2 0 0 1-2.8-2.8l8.5-8.5"/></svg></button>
+    <input type="file" id="chatFile" accept="image/*,video/*,audio/*" multiple hidden>
+    <input type="text" id="chatIn" placeholder="Mensagem, foto ou áudio" autocomplete="off">
+    <div class="recbar"><i></i><span id="recT">0:00</span><span>Gravando áudio…</span><button type="button" id="recCancel">Cancelar</button></div>
+    <button type="button" class="send" id="sendBtn" aria-label="Gravar áudio" title="Gravar áudio">
+      <svg class="s-mic" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V22h2v-3.1a7 7 0 0 0 6-6.9z"/></svg>
+      <svg class="s-send" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
+      <svg class="s-stop" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
+    </button>
+  </form>
+</div>
+
+<div class="modal" id="okModal">
+  <div class="panel">
+    <div style="font-size:2.6rem">✅</div>
+    <h3 style="margin-top:10px">Solicitação enviada!</h3>
+    <div class="proto grad-txt" id="okProto">FG-0000</div>
+    <p>Guarde este protocolo para acompanhar seu pedido. Abrimos o WhatsApp com o resumo pronto para enviar ao nosso especialista.</p>
+    <p id="okUp" style="color:var(--txt);font-size:.9rem;margin-top:-10px"></p>
+    <div class="row">
+      <a class="btn btn-wa" id="okWa" target="_blank" rel="noopener">Abrir WhatsApp</a>
+      <button class="btn btn-ghost" onclick="closeOk(true)">Acompanhar pedido</button>
+    </div>
+  </div>
+</div>
+
+<script src="assets/config.js?v=10"></script>
+<script src="assets/data.js?v=10"></script>
+<script src="assets/chatbot.js?v=10"></script>
+<script>
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const P = FG.precos();
+const anexos = [];
+const rotulo = { imagem: 'Foto', video: 'Vídeo', audio: 'Áudio' };
+const hora = d => new Date(d || Date.now()).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+/* NAV / reveal / counters */
+addEventListener('scroll', () => $('#nav').classList.toggle('scrolled', scrollY > 30));
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .12 });
+$$('.reveal').forEach(el => io.observe(el));
+$$('[data-count]').forEach(el => {
+  const end = +el.dataset.count; let n = 0; const step = Math.ceil(end / 60);
+  const t = setInterval(() => { n = Math.min(end, n + step); el.textContent = '+' + n.toLocaleString('pt-BR'); if (n >= end) clearInterval(t); }, 25);
+});
+setTimeout(() => $('#scene').classList.add('open'), 1600);
+$$('.nav ul a').forEach(a => a.addEventListener('click', () => $('#nav').classList.remove('menu')));
+
+/* WhatsApp links */
+$$('.js-wa').forEach(a => { a.href = FG.waLink(a.dataset.msg || 'Olá! Vim pelo site da FireGuard.'); a.target = '_blank'; a.rel = 'noopener'; });
+setTimeout(() => $('#tip').classList.add('show'), 3500);
+setTimeout(() => $('#tip').classList.remove('show'), 9000);
+
+/* ORÇAMENTO */
+const desc = { envidracamento: 'Sistema retrátil, abertura total', anteparo: 'Barreira certificada + laudo', cortina: 'Automatizada por app e voz', guardacorpo: 'Vidro laminado, sem colunas' };
+$('#optProd').innerHTML = Object.entries(P.produtos).map(([k, v], i) =>
+  `<div class="opt"><input type="radio" name="produto" id="p_${k}" value="${k}" ${i === 0 ? 'checked' : ''}><label for="p_${k}"><b>${v.nome}</b><small>${desc[k] || ''}</small></label></div>`).join('');
+$('#selVidro').innerHTML = Object.entries(P.vidros).map(([k, v]) => `<option value="${k}">${v.nome}</option>`).join('');
+const cores = { natural: '#b9bcc2', branco: '#f4f4f4', preto: '#1a1a1a', bronze: '#9a6b44' };
+$('#sw').innerHTML = Object.entries(P.acabamentos).map(([k, v], i) =>
+  `<div class="sw"><input type="radio" name="acabamento" id="a_${k}" value="${k}" ${i === 0 ? 'checked' : ''}><label for="a_${k}"><i style="background:${cores[k]}"></i>${v.nome}</label></div>`).join('');
+$('#ex').innerHTML = Object.entries(P.extras).map(([k, v]) =>
+  `<label class="ck"><input type="checkbox" name="extras" value="${k}">${v.nome}</label>`).join('');
+
+function dadosForm() {
+  const f = new FormData($('#qForm'));
+  return {
+    produto: f.get('produto'), vidro: f.get('vidro'), acabamento: f.get('acabamento'),
+    largura: +f.get('largura'), altura: +f.get('altura'), vaos: +f.get('vaos') || 1,
+    extras: f.getAll('extras'), cliente: (f.get('cliente') || '').trim(), telefone: (f.get('telefone') || '').trim(),
+    cidade: (f.get('cidade') || '').trim(), tipoImovel: f.get('tipoImovel'), obs: (f.get('obs') || '').trim(),
+  };
+}
+function atualizarEst() {
+  const d = dadosForm(), c = FG.calcular(d);
+  $('#eProd').textContent = c.produto;
+  $('#eMed').textContent = `${String(d.largura).replace('.', ',')} × ${String(d.altura).replace('.', ',')} m · ${d.vaos} vão${d.vaos > 1 ? 's' : ''}`;
+  $('#eArea').textContent = c.area.toFixed(2).replace('.', ',') + ' m²';
+  $('#eVidro').textContent = c.vidro;
+  $('#eAcab').textContent = c.acabamento;
+  $('#eExtras').textContent = c.linhasExtras.length ? c.linhasExtras.map(e => e.nome).join(', ') : 'Nenhum';
+  $('#eAnexos').textContent = anexos.length ? anexos.length + ' arquivo(s)' : 'Nenhum';
+}
+$('#qForm').addEventListener('input', atualizarEst);
+atualizarEst();
+$$('[data-prod]').forEach(a => a.addEventListener('click', () => { $('#p_' + a.dataset.prod).checked = true; atualizarEst(); }));
+
+/* ANEXOS DO FORMULÁRIO */
+function addArquivos(files) {
+  for (const f of files) {
+    const t = FG.tipoDe(f);
+    if (!t) { alert(`"${f.name}" não é foto, vídeo ou áudio.`); continue; }
+    if (anexos.length >= 8) { alert('Limite de 8 arquivos.'); break; }
+    if (f.size > 50 * 1048576) { alert(`"${f.name}" passa de 50 MB.`); continue; }
+    anexos.push({ blob: f, tipo: t, nome: f.name, url: URL.createObjectURL(f) });
+  }
+  renderThumbs();
+}
+function renderThumbs() {
+  setTimeout(atualizarEst);
+  $('#thumbs').innerHTML = anexos.map((a, i) => `<div class="th">${a.tipo === 'imagem' ? `<img src="${a.url}" alt="">` : a.tipo === 'video' ? `<video src="${a.url}" muted playsinline></video>` : `<div>🎤 ${FG.fmtDur(a.duracao) || ''}<audio src="${a.url}" controls></audio></div>`}
+    <span class="k">${rotulo[a.tipo]} · ${FG.fmtTam(a.blob.size)}</span><button type="button" class="x" data-i="${i}" aria-label="Remover">×</button></div>`).join('');
+  $$('#thumbs .x').forEach(b => b.onclick = () => { URL.revokeObjectURL(anexos[+b.dataset.i].url); anexos.splice(+b.dataset.i, 1); renderThumbs(); });
+}
+$('#fIn').addEventListener('change', e => { addArquivos(e.target.files); e.target.value = ''; });
+['dragenter', 'dragover'].forEach(ev => $('#dz').addEventListener(ev, e => { e.preventDefault(); $('#dz').classList.add('over'); }));
+['dragleave', 'drop'].forEach(ev => $('#dz').addEventListener(ev, e => { e.preventDefault(); $('#dz').classList.remove('over'); }));
+$('#dz').addEventListener('drop', e => addArquivos(e.dataTransfer.files));
+let gravForm = null, gravTimer = null;
+$('#recBtn').addEventListener('click', async () => {
+  if (!gravForm) {
+    try { gravForm = await FG.gravarAudio(); } catch (err) { $('#recInfo').textContent = '⚠️ Não foi possível acessar o microfone. Você pode enviar um arquivo de áudio.'; return; }
+    $('#recBtn').classList.add('rec'); $('#recBtn').textContent = '⏹ Parar gravação';
+    gravTimer = setInterval(() => { $('#recInfo').textContent = '🔴 Gravando ' + FG.fmtDur((Date.now() - gravForm.inicio) / 1000 + .01); }, 300);
+  } else {
+    clearInterval(gravTimer);
+    const { blob, duracao } = await gravForm.parar(); gravForm = null;
+    $('#recBtn').classList.remove('rec'); $('#recBtn').textContent = '🎤 Gravar áudio';
+    $('#recInfo').textContent = 'Áudio adicionado ✅';
+    anexos.push({ blob, tipo: 'audio', nome: 'audio-gravado.webm', duracao, url: URL.createObjectURL(blob) }); renderThumbs();
+  }
+});
+
+$('#qForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const d = dadosForm();
+  if (!d.cliente || !d.telefone || !$('#lgpd').checked) {
+    const el = !d.cliente ? $('[name=cliente]') : $('[name=telefone]');
+    el.focus(); el.style.borderColor = 'var(--fire)'; return;
+  }
+  const item = FG.novo({ ...d, origem: 'Site' });
+  const c = FG.calcular(d);
+  const msg = `Olá, FireGuard! 👋\nAcabei de enviar uma solicitação de orçamento pelo site.\n\n` +
+    `*Protocolo:* ${item.protocolo}\n*Nome:* ${d.cliente}\n*Solução:* ${c.produto}\n` +
+    `*Medidas:* ${d.largura} x ${d.altura} m (${d.vaos} vão${d.vaos > 1 ? 's' : ''}) · ${c.area.toFixed(2)} m²\n` +
+    `*Vidro:* ${c.vidro}\n*Acabamento:* ${c.acabamento}\n` +
+    (c.linhasExtras.length ? `*Opcionais:* ${c.linhasExtras.map(x => x.nome).join(', ')}\n` : '') +
+    `*Local:* ${d.cidade || '—'} (${d.tipoImovel})\n\nAguardo o orçamento. Obrigado!` +
+    (d.obs ? `\n\n_${d.obs}_` : '') +
+    (anexos.length ? `\n\n📎 Enviei ${anexos.length} arquivo${anexos.length > 1 ? 's' : ''} (${[...new Set(anexos.map(a => rotulo[a.tipo].toLowerCase()))].join(', ')}) pelo site.` : '');
+  $('#okProto').textContent = item.protocolo;
+  $('#okWa').href = FG.waLink(msg);
+  $('#okModal').classList.add('open');
+  window.open(FG.waLink(msg), '_blank', 'noopener');
+  if (anexos.length) {
+    $('#okUp').textContent = `Enviando ${anexos.length} arquivo(s)…`;
+    for (const a of anexos.splice(0)) { try { await FG.anexar(item.id, a.blob, { origem: 'Site', nome: a.nome, duracao: a.duracao }); } catch (err) { console.warn(err); } }
+    renderThumbs();
+    $('#okUp').textContent = '📎 Arquivos recebidos e enviados para análise ✅';
+  } else $('#okUp').textContent = '';
+});
+function closeOk(track) {
+  $('#okModal').classList.remove('open');
+  if (track) { $('#tInput').value = $('#okProto').textContent; rastrear($('#okProto').textContent); location.hash = 'acompanhar'; }
+}
+$('#okModal').addEventListener('click', e => { if (e.target.id === 'okModal') closeOk(); });
+
+/* ACOMPANHAR */
+const ETAPAS = ['novo', 'analise', 'enviado', 'aprovado', 'medicao', 'instalacao', 'concluido'];
+function rastrear(proto) {
+  const it = FG.buscar(proto), box = $('#trackResult');
+  if (!it) { box.innerHTML = `<div style="text-align:center;padding:40px 0;color:var(--muted)"><div style="font-size:2.2rem">🤔</div>Não encontramos o protocolo <b style="color:var(--txt)">${proto || '—'}</b>.<br>Confira o número enviado no WhatsApp.</div>`; return; }
+  const st = FG.statusInfo(it.status), idx = ETAPAS.indexOf(it.status);
+  const quando = s => { const h = (it.historico || []).find(x => x.status === s); return h ? new Date(h.data).toLocaleDateString('pt-BR') : ''; };
+  const c = FG.calcular(it, it.ajustes);
+  const last = (it.mensagens || []).slice(-2);
+  box.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap">
+      <div><small style="color:var(--muted)">Protocolo</small><h3 style="font-size:1.6rem">${it.protocolo}</h3>
+      <div style="color:var(--muted);font-size:.9rem">${it.cliente} · ${c.produto}</div></div>
+      <span class="badge" style="color:${st.cor};background:${st.cor}22">${st.nome}</span>
+    </div>
+    ${it.status === 'perdido' ? '<p style="margin-top:20px;color:var(--muted)">Este orçamento foi encerrado. Fale com a gente para reabri-lo.</p>' :
+    `<ul class="tl">${ETAPAS.map((s, i) => `<li class="${i <= idx ? 'done' : ''} ${i === idx ? 'cur' : ''}">${FG.statusInfo(s).nome}<small>${quando(s)}</small></li>`).join('')}</ul>`}
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px">
+      <div style="padding:14px;border:1px solid var(--line);border-radius:12px"><small style="color:var(--muted)">Valor do orçamento</small><br><b style="font-family:Sora;font-size:1.2rem">${it.proposta ? FG.brl(it.proposta) : 'Em preparação'}</b>${it.proposta && it.condicao ? `<br><small style="color:var(--muted)">${it.condicao}</small>` : ''}</div>
+      <div style="padding:14px;border:1px solid var(--line);border-radius:12px"><small style="color:var(--muted)">Área</small><br><b style="font-family:Sora;font-size:1.2rem">${c.area.toFixed(2).replace('.', ',')} m²</b></div>
+    </div>
+    ${it.visita ? `<div style="margin-top:12px;padding:12px 14px;border-radius:12px;background:rgba(167,139,250,.1);font-size:.88rem">📐 <b>Visita técnica:</b> ${FG.fmtDiaLongo(it.visita.data)}, às ${it.visita.hora}<br><small style="color:var(--muted)">Técnico responsável: ${FG.tecnico(it.visita.tecnico).nome}</small></div>` : ''}
+    ${it.instalacao ? `<div style="margin-top:8px;padding:12px 14px;border-radius:12px;background:rgba(34,211,238,.1);font-size:.88rem">🛠️ <b>Instalação:</b> ${FG.fmtDiaLongo(it.instalacao.data)}, às ${it.instalacao.hora}<br><small style="color:var(--muted)">${FG.equipeInst(it.instalacao.equipe).nome} · ${FG.equipeInst(it.instalacao.equipe).membros}</small></div>` : ''}
+    ${last.length ? `<div style="margin-top:18px"><small style="color:var(--muted)">Últimas mensagens</small>${last.map(m => `<div style="margin-top:8px;padding:10px 14px;border-radius:12px;background:${m.de === 'cliente' ? 'rgba(37,211,102,.08)' : 'var(--bg3)'};font-size:.88rem"><b style="font-size:.75rem;color:var(--accent-txt)">${m.de === 'cliente' ? 'Você' : m.de === 'bot' ? 'Assistente' : 'FireGuard'}</b><br>${m.txt}</div>`).join('')}</div>` : ''}
+    ${(it.midias || []).length ? `<div style="margin-top:18px"><small style="color:var(--muted)">Arquivos enviados (${it.midias.length})</small><div class="thumbs">${it.midias.map(m => `<div class="th">${FG.midiaHTML(m)}<span class="k">${rotulo[m.tipo]}</span></div>`).join('')}</div></div>` : ''}
+    <a class="btn btn-wa" style="width:100%;margin-top:20px" target="_blank" rel="noopener" href="${FG.waLink('Olá! Gostaria de falar sobre o meu pedido ' + it.protocolo + '.')}">Falar sobre este pedido</a>`;
+  FG.hidratar(box);
+}
+$('#tForm').addEventListener('submit', e => { e.preventDefault(); rastrear($('#tInput').value); });
+$$('.hint code').forEach(c => c.addEventListener('click', () => { $('#tInput').value = c.textContent; rastrear(c.textContent); }));
+
+/* CHATBOT — mesmo fluxo que roda no WhatsApp (assets/chatbot.js) */
+function toggleChat(force) {
+  const open = force ?? !$('#chat').classList.contains('open');
+  $('#chat').classList.toggle('open', open);
+  $('#tip').classList.remove('show');
+  if (open) { FGBot.abrir(); setTimeout(() => $('#chatIn').focus(), 300); }
+}
+$('#botBtn').addEventListener('click', () => toggleChat());
+FGBot.init({ modo: 'site' });
+addEventListener('storage', e => { if (e.key === 'fg_tema') FG.tema(e.newValue); });
+</script>
+</body>
+</html>
