@@ -174,6 +174,9 @@ main{display:flex;flex-direction:column;overflow:hidden}
 .banner .btn+.btn{margin-left:8px}
 .fb{margin-top:10px;padding:10px 12px;border-radius:10px;background:var(--bg3);font-size:.84rem}
 .fb small{display:block;color:var(--muted);font-size:.72rem}
+/* selo de etapa futura do projeto */
+.etapa{display:inline-block;margin-left:6px;padding:1px 7px;border:1px solid currentColor;border-radius:99px;font-size:.62rem;font-weight:600;letter-spacing:.02em;color:var(--muted);white-space:nowrap;vertical-align:middle;font-family:Inter,sans-serif}
+.etapa-aviso{margin-bottom:16px;padding:10px 14px;border:1px dashed var(--muted);border-radius:10px;color:var(--muted);font-size:.85rem}
 /* agenda */
 .ag-grid{display:grid;grid-template-columns:1fr 1.6fr 280px;gap:16px;align-items:start}
 .pend{background:var(--bg3);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px;font-size:.82rem}
@@ -326,10 +329,10 @@ td input:focus{border-color:var(--fire)}
       <button data-v="dash" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg><span>Visão geral</span></button>
       <button data-v="orc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg><span>Orçamentos</span><span class="cnt" id="cNovo">0</span></button>
       <button data-v="chat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg><span>Conversas</span><span class="cnt red" id="cHum"></span></button>
-      <button data-v="agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg><span>Agenda</span><span class="cnt" id="cAg"></span></button>
+      <button data-v="agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg><span>Agenda <span class="etapa">Etapa 2</span></span><span class="cnt" id="cAg"></span></button>
       <button data-v="precos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h4"/></svg><span>Tabela de preços</span></button>
     </nav>
-    <div class="foot"><b><span class="dot"></span>WhatsApp conectado</b>Chatbot ativo · respondendo 24h<br><a href="index.html" id="linkFront" style="color:var(--accent-txt)">← Ver site</a> · <a href="#" id="reset" style="color:var(--muted)">Resetar demo</a></div>
+    <div class="foot"><b><span class="dot"></span>WhatsApp conectado</b>Chatbot ativo · respondendo 24h<br><span style="color:var(--muted)">Itens com o selo <span class="etapa" style="margin-left:0">Etapa 2</span> entram na segunda fase do projeto.</span><br><a href="index.html" id="linkFront" style="color:var(--accent-txt)">← Ver site</a> · <a href="#" id="reset" style="color:var(--muted)">Resetar demo</a></div>
   </aside>
 
   <main>
@@ -378,6 +381,7 @@ td input:focus{border-color:var(--fire)}
 
     <!-- AGENDA -->
     <section class="view" id="v-agenda">
+      <p class="etapa-aviso">📅 A agenda de visitas técnicas e instalações faz parte da <b>Etapa 2</b> do projeto. Aqui você vê como ela vai funcionar.</p>
       <div class="ag-grid">
         <div class="box"><h3>Aguardando agendamento</h3><div id="agPend"></div></div>
         <div class="box"><h3>Próximos 14 dias <small style="color:var(--muted);font-family:Inter;font-weight:400">visitas técnicas e instalações</small></h3><div id="agDias"></div></div>
@@ -405,7 +409,7 @@ td input:focus{border-color:var(--fire)}
   <div id="dBanner"></div>
   <div class="tabs" id="dTabs">
     <button data-t="calc" class="on">Calculadora & proposta</button>
-    <button data-t="agenda" id="tabAgenda">Visita & instalação</button>
+    <button data-t="agenda" id="tabAgenda">Visita & instalação <span class="etapa">Etapa 2</span></button>
     <button data-t="conv">Conversa WhatsApp</button>
     <button data-t="midias" id="tabMidias">Fotos, vídeos e áudios</button>
     <button data-t="hist">Histórico</button>
@@ -434,6 +438,9 @@ const corDe = s => cores[[...s].reduce((a, c) => a + c.charCodeAt(0), 0) % cores
 const ini = n => n.split(' ').filter(Boolean).slice(0, 2).map(x => x[0]).join('').toUpperCase();
 let atual = null, convSel = null, termo = '';
 const ATENDENTE = FG.EQUIPE.atendentes[0];
+// situações que só entram na Etapa 2 do projeto (agenda, instalação e conclusão)
+const ETAPA2 = ['medicao', 'instalacao', 'concluido'];
+const SELO2 = ' <span class="etapa">Etapa 2</span>';
 const agoraISO = () => new Date().toISOString();
 const hojeISO = FG.iso(new Date());
 const precisaAtendente = x => x.humano?.status === 'aguardando';
@@ -475,10 +482,10 @@ function renderDash() {
   const urg = l.filter(ehUrgente), hum = l.filter(x => precisaAtendente(x) && !ehUrgente(x)), ag = l.filter(precisaAgenda);
   const prox = eventos(l).filter(e => e.data <= FG.diaMais(2));
   $('#alertas').innerHTML = [
-    urg.length ? `<div class="alerta urg"><span class="ico">🚨</span><div style="flex:1"><b>${urg.length} atendimento(s) URGENTE(S) · avaliação baixa</b><ul>${urg.map(x => `<li><span>${x.cliente} <small>· nota ${x.urgente.nota}/5${x.urgente.categoria ? ' · ' + x.urgente.categoria : ''}${x.urgente.relato ? ' · “' + x.urgente.relato + '”' : ''} · ${desde(x.urgente.em)}</small></span><a data-hum="${x.id}">Atender agora →</a></li>`).join('')}</ul></div></div>` : '',
+    urg.length ? `<div class="alerta urg"><span class="ico">🚨</span><div style="flex:1"><b>${urg.length} atendimento(s) URGENTE(S) · avaliação baixa${SELO2}</b><ul>${urg.map(x => `<li><span>${x.cliente} <small>· nota ${x.urgente.nota}/5${x.urgente.categoria ? ' · ' + x.urgente.categoria : ''}${x.urgente.relato ? ' · “' + x.urgente.relato + '”' : ''} · ${desde(x.urgente.em)}</small></span><a data-hum="${x.id}">Atender agora →</a></li>`).join('')}</ul></div></div>` : '',
     hum.length ? `<div class="alerta hum"><span class="ico">🙋</span><div style="flex:1"><b>${hum.length} cliente(s) pediram atendente</b><ul>${hum.map(x => `<li><span>${x.cliente} <small>· ${x.humano.motivo} · ${desde(x.humano.solicitadoEm)}</small></span><a data-hum="${x.id}">Atender →</a></li>`).join('')}</ul></div></div>` : '',
-    ag.length ? `<div class="alerta ag"><span class="ico">📅</span><div style="flex:1"><b>${ag.length} aprovado(s) aguardando visita técnica</b><ul>${ag.map(x => `<li><span>${x.cliente} <small>· ${x.visitaPref ? 'preferência: ' + prefTxt(x.visitaPref) : 'aguardando o cliente escolher datas'}</small></span><a data-ag="${x.id}">Agendar →</a></li>`).join('')}</ul></div></div>` : '',
-    prox.length ? `<div class="alerta vis"><span class="ico">🚐</span><div style="flex:1"><b>Próximos 2 dias em campo</b><ul>${prox.slice(0, 4).map(e => `<li><span>${e.tipo === 'visita' ? '📐' : '🛠️'} ${FG.fmtDia(e.data)} ${e.hora} · ${e.it.cliente} <small>· ${e.resp}</small></span><a data-ag="${e.it.id}">Ver →</a></li>`).join('')}</ul></div></div>` : '',
+    ag.length ? `<div class="alerta ag"><span class="ico">📅</span><div style="flex:1"><b>${ag.length} aprovado(s) aguardando visita técnica${SELO2}</b><ul>${ag.map(x => `<li><span>${x.cliente} <small>· ${x.visitaPref ? 'preferência: ' + prefTxt(x.visitaPref) : 'aguardando o cliente escolher datas'}</small></span><a data-ag="${x.id}">Agendar →</a></li>`).join('')}</ul></div></div>` : '',
+    prox.length ? `<div class="alerta vis"><span class="ico">🚐</span><div style="flex:1"><b>Próximos 2 dias em campo${SELO2}</b><ul>${prox.slice(0, 4).map(e => `<li><span>${e.tipo === 'visita' ? '📐' : '🛠️'} ${FG.fmtDia(e.data)} ${e.hora} · ${e.it.cliente} <small>· ${e.resp}</small></span><a data-ag="${e.it.id}">Ver →</a></li>`).join('')}</ul></div></div>` : '',
   ].join('');
   $$('[data-hum]').forEach(a => a.onclick = () => { abrir(a.dataset.hum); aba('conv'); });
   $$('#alertas [data-ag]').forEach(a => a.onclick = () => { abrir(a.dataset.ag); aba('agenda'); });
@@ -532,7 +539,7 @@ function renderKanban() {
   const l = lista().filter(x => !fp || x.produto === fp);
   $('#kanban').innerHTML = FG.STATUS.map(s => {
     const it = l.filter(x => x.status === s.id).sort((a, b) => prioridade(b) - prioridade(a));
-    return `<div class="col" data-s="${s.id}"><header><span style="color:${s.cor};font-size:.85rem;font-weight:600">● ${s.nome}</span><span>${it.length}${it.some(x => x.proposta != null) ? ' · ' + brl(it.reduce((a, x) => a + valor(x), 0)).replace(',00', '') : ''}</span></header>
+    return `<div class="col" data-s="${s.id}"><header><span style="color:${s.cor};font-size:.85rem;font-weight:600">● ${s.nome}${ETAPA2.includes(s.id) ? ' <span class="etapa">Etapa 2</span>' : ''}</span><span>${it.length}${it.some(x => x.proposta != null) ? ' · ' + brl(it.reduce((a, x) => a + valor(x), 0)).replace(',00', '') : ''}</span></header>
       ${it.map(x => `<div class="kc ${ehUrgente(x) ? 'urg' : ''}" draggable="true" data-id="${x.id}"><span class="p">${x.protocolo}${x.status === 'novo' ? '<i class="new-dot"></i>' : ''}</span><b>${x.cliente}</b><small>${FG.calcular(x).produto}</small><small>${x.cidade || '—'}</small>${tagsCard(x)}
       <div class="ft"><span class="tag">${x.origem || 'WhatsApp'}${(x.midias || []).length ? ` · 📎 ${x.midias.length}` : ''}</span><b>${valorTxt(x)}</b></div></div>`).join('')}</div>`;
   }).join('');
